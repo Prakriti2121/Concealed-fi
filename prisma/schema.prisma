@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  // provider = "postgresql"
+
+  url = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String
+  email    String @unique
+  password String
+  role     String
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+
+  title String @default("Untitled Product")
+
+  // Wine Fields
+  isNew               Boolean
+  availableOnlyOnline Boolean
+  organic             Boolean
+  featured            Boolean
+
+  // Product Details
+  productCode String
+  vintage     String
+  price       Float
+
+  // Additional Product Info
+  largeImage          String // URL of large image
+  buyLink             String // URL to buy the product
+  sortiment           String // Tillfälliga sortimentet , Beställning sortimentet, Exklusiva sortimentet, Fasta Sortimentet
+  tagLine             String
+  // producerDescription String @db.Text
+  producerDescription String @db.LongText
+
+  producerUrl    String // URL (or other meaning as required)
+  region         String
+  taste          Json // List of tastes stored as JSON
+  awards         String
+  additionalInfo String
+
+  // Food combinations (all booleans)
+  vegetables        Boolean
+  roastedVegetables Boolean
+  softCheese        Boolean
+  hardCheese        Boolean
+  starches          Boolean
+  fish              Boolean
+  richFish          Boolean
+  whiteMeatPoultry  Boolean // "white meat / poultry"
+  lambMeat          Boolean
+  porkMeat          Boolean
+  redMeatBeef       Boolean // "red meat / beef"
+  gameMeat          Boolean
+  curedMeat         Boolean
+  sweets            Boolean
+
+  // Other Specifications
+  bottleVolume Float // Bottle/package volume
+  alcohol      Float
+  composition  String
+  closure      String
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
