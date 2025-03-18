@@ -6,6 +6,7 @@ import Container from "@/components/atoms/Container";
 import { Toaster } from "react-hot-toast";
 
 import { Providers } from "./provider";
+import Footer from "@/components/molecules/Footer";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -34,9 +35,9 @@ export default function RootLayout({
         <Providers>
           <Container>
             <Navbar />
-
             {children}
           </Container>
+          <Footer />
         </Providers>
         <Toaster />
       </body>

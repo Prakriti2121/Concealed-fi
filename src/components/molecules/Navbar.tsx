@@ -14,7 +14,7 @@ import { useSession } from "next-auth/react";
 
 const navItems = [
   { name: "Home", href: "/" },
-  { name: "About Us", href: "#" },
+  { name: "About Us", href: "#about" },
   { name: "Wines", href: "/viinit-luettelo" },
   { name: "Wine Articles", href: "#" },
   { name: "Contact Us", href: "/ota-yhteytta" },

@@ -5,7 +5,7 @@ import Container from "@/components/atoms/Container";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-const AboutUs = () => {
+const OurWines = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Animation variants
@@ -23,66 +23,64 @@ const AboutUs = () => {
       <motion.div
         initial="hidden"
         whileInView="visible"
-        id="about"
         viewport={{ once: true, margin: "-100px" }}
         className={`${
           isDesktop ? "grid grid-cols-2 items-center" : "flex flex-col"
         } gap-12`}
       >
-        {/* Image section */}
-        <motion.div
-          variants={fadeInUp}
-          className={`${isDesktop ? "order-1" : "order-2"}`}
-        >
-          <div className="relative overflow-hidden rounded-[40px] shadow-lg">
-            <Image
-              src="/images/barrels.jpg"
-              alt="About Us"
-              width={500}
-              height={500}
-              className="w-full aspect-square object-cover transform hover:scale-105 transition-transform duration-700"
-            />
-            {/* Decorative element */}
-            <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-xl"></div>
-          </div>
-        </motion.div>
-
         {/* Text section */}
-        <motion.div
-          variants={fadeInUp}
-          className={`${isDesktop ? "order-2" : "order-1"} space-y-6`}
-        >
+        <motion.div variants={fadeInUp} className="space-y-6">
           <h2 className="text-4xl md:text-5xl font-black relative">
-            About Us
+            Our Wines
             <span className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary/5 text-7xl md:text-8xl font-black">
-              ABOUT
+              WINES
             </span>
           </h2>
 
           <div className="space-y-6 text-gray-700 font-light text-lg relative">
             <p>
-              Concealed Wines on pohjoismaisten markkinoiden viinintoimittaja.
-              Meidän tavoitteemme on tarjota loistoviinejä kuluttajille. Tällä
-              hetkellä myymme muutamia laatuviinejä Suomessa ja samanaikaisesti
-              tuomme markkinoille uusia viinejä.
+              Tarjoamme laajan valikoiman huolellisesti valittuja viinejä eri
+              puolilta maailmaa. Jokainen viini on valittu sen ainutlaatuisen
+              maun, laadun ja tarinan perusteella, jotta voimme tarjota
+              asiakkaillemme parhaan mahdollisen viinielämyksen.
             </p>
             <p>
-              Esittelemme tällä nettisivulla viinejä, joita maahantuomme
-              Suomeen. Saadaksesi lisätietoja Concealed Wines yhtiöstä, vieraile
-              osoitteessa
+              Valikoimastamme löydät sekä klassisia suosikkeja että
+              harvinaisempia löytöjä, jotka sopivat erilaisiin tilanteisiin ja
+              makumieltymyksiin. Tutustu valikoimaamme ja löydä uusia
+              suosikkeja.
             </p>
 
             {/* Decorative element */}
-            <div className="absolute -top-10 -left-10 w-20 h-20 bg-primary/5 rounded-full blur-xl"></div>
+            <div className="absolute -bottom-10 -right-10 w-20 h-20 bg-primary/5 rounded-full blur-xl"></div>
           </div>
 
           <div className="pt-4">
             <Button className="relative overflow-hidden bg-[#09090B] text-xl px-6 py-3 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black">
               <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
-                Read More
+                Explore Wines
               </span>
               <span className="absolute left-0 top-0 w-0 h-full bg-white transition-all duration-500 ease-in-out group-hover:w-full"></span>
             </Button>
+          </div>
+        </motion.div>
+
+        {/* Image section */}
+        <motion.div variants={fadeInUp}>
+          <div className="relative overflow-hidden rounded-[40px] shadow-lg">
+            <Image
+              src="/images/barrels.jpg"
+              alt="Our Wines"
+              width={500}
+              height={500}
+              className="w-full aspect-square object-cover transform hover:scale-105 transition-transform duration-700"
+            />
+            {/* Wine glass decorative element */}
+            <div className="absolute top-4 right-4 w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
+              <div className="w-8 h-8 border-2 border-white/30 rounded-full"></div>
+            </div>
+            {/* Decorative element */}
+            <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary/10 rounded-full blur-xl"></div>
           </div>
         </motion.div>
       </motion.div>
@@ -90,4 +88,4 @@ const AboutUs = () => {
   );
 };
 
-export default AboutUs;
+export default OurWines;

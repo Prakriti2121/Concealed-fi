@@ -1,4 +1,6 @@
 import AboutUs from "@/components/molecules/AboutUs";
+import OurWines from "@/components/molecules/OurWines";
+import WineArticles from "@/components/molecules/WineArticles";
 import FeaturedProduct from "@/components/organisms/FeaturedProduct";
 import Jumbotron from "@/components/organisms/Jumbotron";
 
@@ -8,7 +10,7 @@ export default function Home() {
       <Jumbotron />
 
       {/* featured product */}
-      <div className="mt-">
+      <div>
         <FeaturedProduct />
       </div>
       {/* / end of featured product */}
@@ -16,9 +18,13 @@ export default function Home() {
         <div>
           <AboutUs />
         </div>
+        <div className="mt-44">
+          <OurWines />
+        </div>
+        <div className="mt-44">
+          <WineArticles />
+        </div>
       </div>
-
-      <div className="mb-72"></div>
     </div>
   );
 }

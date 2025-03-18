@@ -5,7 +5,7 @@ import Container from "@/components/atoms/Container";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-const AboutUs = () => {
+const WineArticles = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Animation variants
@@ -18,12 +18,28 @@ const AboutUs = () => {
     },
   };
 
+  // Staggered animation for the decorative dots
+  const dotsContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const dotItem = {
+    hidden: { opacity: 0, scale: 0 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
   return (
     <Container>
       <motion.div
         initial="hidden"
         whileInView="visible"
-        id="about"
         viewport={{ once: true, margin: "-100px" }}
         className={`${
           isDesktop ? "grid grid-cols-2 items-center" : "flex flex-col"
@@ -32,18 +48,16 @@ const AboutUs = () => {
         {/* Image section */}
         <motion.div
           variants={fadeInUp}
-          className={`${isDesktop ? "order-1" : "order-2"}`}
+          className={`${isDesktop ? "order-1" : "order-2"} relative`}
         >
           <div className="relative overflow-hidden rounded-[40px] shadow-lg">
             <Image
               src="/images/barrels.jpg"
-              alt="About Us"
+              alt="Wine Articles"
               width={500}
               height={500}
               className="w-full aspect-square object-cover transform hover:scale-105 transition-transform duration-700"
             />
-            {/* Decorative element */}
-            <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-xl"></div>
           </div>
         </motion.div>
 
@@ -53,9 +67,9 @@ const AboutUs = () => {
           className={`${isDesktop ? "order-2" : "order-1"} space-y-6`}
         >
           <h2 className="text-4xl md:text-5xl font-black relative">
-            About Us
+            Wine Articles
             <span className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary/5 text-7xl md:text-8xl font-black">
-              ABOUT
+              ARTICLES
             </span>
           </h2>
 
@@ -90,4 +104,4 @@ const AboutUs = () => {
   );
 };
 
-export default AboutUs;
+export default WineArticles;
