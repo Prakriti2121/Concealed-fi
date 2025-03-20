@@ -79,3 +79,47 @@ model Product {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Post {
+  id              Int        @id @default(autoincrement())
+  title           String
+  content         String     @db.Text
+  slug            String     @unique
+  featuredImage   String?
+  author          String?
+  seoTitle        String?
+  metaDesc        String?
+  canonicalUrl    String?
+  published       Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  isUncategorized Boolean?
+  tags            Tag[]
+  categories      Category[]
+  comments        Comment[]
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  slug        String?
+  image       String?
+  description String?
+  posts       Post[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  author    String
+  content   String
+  createdAt DateTime @default(now())
+  approved  Boolean  @default(false)
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+}
