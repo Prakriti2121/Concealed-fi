@@ -61,7 +61,7 @@ const items = [
       { title: "View Posts", url: "/admin/posts/all-posts" },
       { title: "Add Posts", url: "/admin/posts/new-post" },
       { title: "Categories", url: "/admin/posts/categories" },
-      { title: "Tags", url: "/admin/posts/new-posts/tags" },
+      { title: "Tags", url: "/admin/posts/tags" },
     ],
   },
   {

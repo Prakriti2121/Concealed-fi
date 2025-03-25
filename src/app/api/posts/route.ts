@@ -53,7 +53,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    // Process tags from the form data
+    // Process tags from the form data (using tag names)
     const tagsData = Array.isArray(body.tags)
       ? body.tags.map((tag: string) => ({
           where: { name: tag },
@@ -61,13 +61,11 @@ export async function POST(request: Request) {
         }))
       : [];
 
-    // Process categories from the form data
-    const categoriesData = Array.isArray(body.categories)
-      ? body.categories.map((category: string) => ({
-          where: { name: category },
-          create: { name: category },
-        }))
-      : [];
+    // Process categories from the form data (using category IDs)
+    const categoriesData =
+      Array.isArray(body.categories) && body.categories.length > 0
+        ? body.categories.map((categoryId: number) => ({ id: categoryId }))
+        : [];
 
     const post = await prisma.post.create({
       data: {
@@ -81,7 +79,7 @@ export async function POST(request: Request) {
         published: body.published ?? false,
         updatedAt: new Date(),
         tags: { connectOrCreate: tagsData },
-        categories: { connectOrCreate: categoriesData },
+        categories: { connect: categoriesData },
       },
       include: {
         tags: true,

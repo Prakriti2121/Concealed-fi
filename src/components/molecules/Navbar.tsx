@@ -16,7 +16,7 @@ const navItems = [
   { name: "Home", href: "/" },
   { name: "About Us", href: "#about" },
   { name: "Wines", href: "/viinit-luettelo" },
-  { name: "Wine Articles", href: "#" },
+  { name: "Wine Articles", href: "/viini-artikkelit" },
   { name: "Contact Us", href: "/ota-yhteytta" },
   { name: "The English", href: "#" },
 ];
