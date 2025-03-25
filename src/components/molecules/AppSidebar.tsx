@@ -33,6 +33,7 @@ import {
   ChevronRight,
   Menu,
   X,
+  MessageSquareMore,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -65,9 +66,9 @@ const items = [
     ],
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Comments",
+    icon: MessageSquareMore,
+    url: "/admin/comments",
   },
   {
     title: "Search",
