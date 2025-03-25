@@ -25,7 +25,6 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import {
-  Calendar,
   Home,
   Inbox,
   Search,
