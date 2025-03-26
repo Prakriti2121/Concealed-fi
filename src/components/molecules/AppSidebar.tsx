@@ -33,6 +33,7 @@ import {
   Menu,
   X,
   MessageSquareMore,
+  FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -62,6 +63,15 @@ const items = [
       { title: "Add Posts", url: "/admin/posts/new-post" },
       { title: "Categories", url: "/admin/posts/categories" },
       { title: "Tags", url: "/admin/posts/tags" },
+    ],
+  },
+  {
+    title: "Pages",
+    icon: FileText,
+    url: "/admin/pages",
+    submenu: [
+      { title: "View Pages", url: "/admin/pages/all-pages" },
+      { title: "Add Page", url: "/admin/pages/new-page" },
     ],
   },
   {

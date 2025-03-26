@@ -123,3 +123,18 @@ model Comment {
   postId    Int
   post      Post     @relation(fields: [postId], references: [id])
 }
+
+model Page {
+  id            Int      @id @default(autoincrement())
+  title         String
+  content       String   @db.Text
+  slug          String   @unique
+  featuredImage String?
+  author        String?
+  seoTitle      String?
+  metaDesc      String?
+  canonicalUrl  String?
+  published     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
