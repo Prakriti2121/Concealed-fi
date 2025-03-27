@@ -18,7 +18,7 @@ const navItems = [
   { name: "Wines", href: "/viinit-luettelo" },
   { name: "Wine Articles", href: "/viini-artikkelit" },
   { name: "Contact Us", href: "/ota-yhteytta" },
-  { name: "The English", href: "#" },
+  { name: "In English", href: "/in-english" },
 ];
 
 export default function Navbar() {

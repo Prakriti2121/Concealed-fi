@@ -68,7 +68,7 @@ const items = [
   {
     title: "Pages",
     icon: FileText,
-    url: "/admin/pages",
+    url: "/admin/pages/all-pages",
     submenu: [
       { title: "View Pages", url: "/admin/pages/all-pages" },
       { title: "Add Page", url: "/admin/pages/new-page" },
