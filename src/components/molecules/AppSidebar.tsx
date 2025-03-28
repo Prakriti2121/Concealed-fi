@@ -27,7 +27,7 @@ import {
 import {
   Home,
   Inbox,
-  Search,
+  Users,
   User,
   ChevronRight,
   Menu,
@@ -80,9 +80,13 @@ const items = [
     url: "/admin/comments",
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
+    title: "Teams",
+    icon: Users,
+    url: "/admin/teams/allteams",
+    submenu: [
+      { title: "View Teams", url: "/admin/teams/allteams" },
+      { title: "Add Team", url: "/admin/teams/newteam" },
+    ],
   },
 ];
 
