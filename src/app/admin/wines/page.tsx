@@ -18,8 +18,7 @@ const AllWines = async () => {
       : [],
   })) as Product[];
   return (
-    <div className="">
-      <div className="text-4xl font-black my-8">All Wines</div>
+    <div>
       {formattedProducts && <AllWinesTable products={formattedProducts} />}
     </div>
   );
