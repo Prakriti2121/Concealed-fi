@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BreadCrumb from "../../components/breadcrumb/breadcrumb";
-// import SidebarContent from "../../senaste-nytt/Components/SidebarContent";
+import SidebarContent from "../../components/sidebarcontent";
 // import { TeamContentSkeleton } from "@/components/skeleton/TeamContentSkeleton";
 
 interface TeamMember {
@@ -75,13 +75,13 @@ export function TeamContent() {
     <div className="container mx-auto my-6 px-4">
       <BreadCrumb title1="Tiimimme" />
       <div className="flex flex-col md:flex-row gap-8 relative">
-        {/* Main Content */}
-        <div className="flex-1">
+        {/* Main Content - Take 2/3 of the width on medium screens and up */}
+        <div className="w-full md:w-3/4">
           <div className="grid gap-6 sm:gap-8 md:gap-10">
             {teamMembers.map((member) => (
               <Card
                 key={member.id}
-                className="overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300 max-w-3xl mx-auto"
+                className="overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-all duration-300"
               >
                 <div className="flex flex-col sm:flex-row h-full">
                   <div className="relative w-full sm:w-1/3 h-64 sm:h-auto">
@@ -89,7 +89,7 @@ export function TeamContent() {
                       <Image
                         src={member.image || "/placeholder.svg"}
                         alt={member.name}
-                        className="object-fill"
+                        className="object-center"
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, 25vw"
                         priority
@@ -123,10 +123,11 @@ export function TeamContent() {
             ))}
           </div>
         </div>
-        {/* Sidebar */}
-        {/* <div className="md:sticky md:top-6 md:self-start h-fit">
+
+        {/* Sidebar - Take 1/3 of the width on medium screens and up */}
+        <div className="w-full md:w-1/4 md:sticky md:top-6 md:self-start">
           <SidebarContent limit={6} />
-        </div> */}
+        </div>
       </div>
     </div>
   );

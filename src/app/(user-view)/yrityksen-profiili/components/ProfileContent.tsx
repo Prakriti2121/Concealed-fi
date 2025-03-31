@@ -15,8 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import BreadCrumb from "../../components/breadcrumb/breadcrumb";
-// import SidebarContent from "../../senaste-nytt/Components/SidebarContent";
-// import { ProfileContentSkeleton } from "@/components/skeleton/ProfileContentSkeleton";
+import SidebarContent from "../../components/sidebarcontent";
 
 interface PageData {
   title: string;
@@ -61,8 +60,8 @@ export function ProfileContent() {
     <div className="container mx-auto my-6 px-4">
       <BreadCrumb title1={pageData.title} />
       <div className="flex flex-col md:flex-row gap-8 relative">
-        {/* Main Content */}
-        <div className="flex-1">
+        {/* Main Content - Take 3/4 of the width on medium screens and up */}
+        <div className="w-full md:w-3/4">
           <Card>
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
@@ -138,10 +137,11 @@ export function ProfileContent() {
             </CardContent>
           </Card>
         </div>
-        {/* Sidebar */}
-        {/* <div className="md:sticky md:top-6 md:self-start h-fit">
+
+        {/* Sidebar - Take 1/4 of the width on medium screens and up */}
+        <div className="w-full md:w-1/4 md:sticky md:top-6 md:self-start">
           <SidebarContent limit={6} />
-        </div> */}
+        </div>
       </div>
     </div>
   );

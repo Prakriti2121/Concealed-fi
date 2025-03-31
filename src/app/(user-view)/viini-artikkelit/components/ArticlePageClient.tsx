@@ -20,7 +20,7 @@ import {
   LinkedinShareButton,
 } from "react-share";
 import BreadCrumb from "../../components/breadcrumb/breadcrumb";
-// import Sidebar from "../Components/SidebarContent";
+import SidebarContent from "../../../(user-view)/components/sidebarcontent";
 
 interface Post {
   slug: string | undefined;
@@ -139,7 +139,7 @@ export default function ArticlePageClient({ slug }: ArticlePageClientProps) {
       />
 
       <div className="flex flex-col lg:flex-row gap-8 relative">
-        {/* Main content */}
+        {/* Main Content */}
         <div className="max-w-4xl">
           <article className="bg-card shadow-lg rounded-lg overflow-hidden">
             <Image
@@ -273,10 +273,10 @@ export default function ArticlePageClient({ slug }: ArticlePageClientProps) {
           </section>
         </div>
 
-        {/* Sidebar
+        {/* Sidebar */}
         <div className="lg:w-1/4 lg:sticky lg:top-6 lg:self-start h-fit">
-          <Sidebar excludeSlug={post.slug} limit={6} />
-        </div> */}
+          <SidebarContent excludeSlug={post.slug} limit={6} />
+        </div>
       </div>
     </div>
   );

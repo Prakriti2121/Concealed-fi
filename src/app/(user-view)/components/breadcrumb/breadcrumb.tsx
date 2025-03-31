@@ -4,24 +4,20 @@ import React from "react";
 interface LinkElementProps {
   title?: string;
   link?: string;
-  noRed?: boolean;
 }
 
-const LinkElement: React.FC<LinkElementProps> = ({ title, link, noRed }) => {
+const LinkElement: React.FC<LinkElementProps> = ({ title, link }) => {
   if (title && link) {
     return (
       <>
         &raquo;&nbsp;
-        <Link
-          href={`${link}/`}
-          className={`${noRed ? "text-white" : "text-red-600"}`}
-        >
+        <Link href={`${link}/`} className="text-red-600">
           <span>{title}</span>
         </Link>
       </>
     );
   } else if (title) {
-    return <p>&raquo;&nbsp; {title}</p>;
+    return <p className="text-black">&raquo;&nbsp; {title}</p>;
   } else {
     return null;
   }
@@ -36,7 +32,6 @@ interface BreadCrumbProps {
   link3?: string;
   title4?: string;
   link4?: string;
-  noRed?: boolean;
 }
 
 const BreadCrumb: React.FC<BreadCrumbProps> = ({
@@ -48,7 +43,6 @@ const BreadCrumb: React.FC<BreadCrumbProps> = ({
   link3,
   title4,
   link4,
-  noRed,
 }) => {
   const breadcrumb = [
     { title: title1, link: link1 },
@@ -59,16 +53,11 @@ const BreadCrumb: React.FC<BreadCrumbProps> = ({
 
   return (
     <div className="text-[0.5rem] sm:text-xs md:text-sm my-1 lg:my-4 flex gap-1">
-      <Link href="/" className={`${noRed ? "text-white" : "text-red-600"}`}>
+      <Link href="/" className="text-red-600">
         Home
       </Link>
       {breadcrumb.map((crumb, index) => (
-        <LinkElement
-          key={index}
-          title={crumb.title}
-          link={crumb.link}
-          noRed={noRed}
-        />
+        <LinkElement key={index} title={crumb.title} link={crumb.link} />
       ))}
     </div>
   );
