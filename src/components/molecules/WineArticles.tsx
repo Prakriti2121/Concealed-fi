@@ -1,11 +1,21 @@
 "use client";
+
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Container from "@/components/atoms/Container";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-const WineArticles = () => {
+interface WineArticlesProps {
+  data: {
+    title: string;
+    content: string;
+    featuredImage: string;
+    canonicalUrl: string;
+  };
+}
+
+const WineArticles: React.FC<WineArticlesProps> = ({ data }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Animation variants
@@ -35,7 +45,7 @@ const WineArticles = () => {
         >
           <div className="relative overflow-hidden rounded-[40px] shadow-lg">
             <Image
-              src="/images/barrels.jpg"
+              src={data.featuredImage || "/images/barrels.jpg"}
               alt="Wine Articles"
               width={500}
               height={500}
@@ -50,33 +60,21 @@ const WineArticles = () => {
           className={`${isDesktop ? "order-2" : "order-1"} space-y-6`}
         >
           <h2 className="text-4xl md:text-5xl font-black relative">
-            Wine Articles
+            {data.title || "Wine Articles"}
             <span className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary/5 text-7xl md:text-8xl font-black">
-              ARTICLES
+              {data.title || "ARTICLES"}
             </span>
           </h2>
 
           <div className="space-y-6 text-gray-700 font-light text-lg relative">
-            <p>
-              Concealed Wines on pohjoismaisten markkinoiden viinintoimittaja.
-              Meidän tavoitteemme on tarjota loistoviinejä kuluttajille. Tällä
-              hetkellä myymme muutamia laatuviinejä Suomessa ja samanaikaisesti
-              tuomme markkinoille uusia viinejä.
-            </p>
-            <p>
-              Esittelemme tällä nettisivulla viinejä, joita maahantuomme
-              Suomeen. Saadaksesi lisätietoja Concealed Wines yhtiöstä, vieraile
-              osoitteessa
-            </p>
-
-            {/* Decorative element */}
+            <div dangerouslySetInnerHTML={{ __html: data.content }} />
             <div className="absolute -top-10 -left-10 w-20 h-20 bg-primary/5 rounded-full blur-xl"></div>
           </div>
 
           <div className="pt-4">
             <Button className="relative overflow-hidden bg-[#09090B] text-xl px-6 py-3 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black">
               <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
-                Read More
+              Lue lisää
               </span>
               <span className="absolute left-0 top-0 w-0 h-full bg-white transition-all duration-500 ease-in-out group-hover:w-full"></span>
             </Button>

@@ -380,11 +380,11 @@ export default function AddProductForm() {
             name="producerUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Producer URL</FormLabel>
+                <FormLabel>Producer</FormLabel>
                 <FormControl>
                   <Input
-                    type="url"
-                    placeholder="https://example.com"
+                    type="text"
+                    placeholder="Producer"
                     {...field}
                   />
                 </FormControl>
