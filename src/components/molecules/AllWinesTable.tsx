@@ -53,7 +53,7 @@ export const AllWinesTable = ({ products }: ProductTableProps) => {
               <TableHead className="border px-6 py-3">Title</TableHead>
               <TableHead className="border px-6 py-3">Price</TableHead>
               <TableHead className="border px-6 py-3">Product Code</TableHead>
-              <TableHead className="border px-6 py-3">Updated At</TableHead>
+              <TableHead className="border px-6 py-3">Created At</TableHead>
               <TableHead className="border px-6 py-3 text-center">
                 Actions
               </TableHead>
@@ -80,7 +80,15 @@ export const AllWinesTable = ({ products }: ProductTableProps) => {
                   {product.productCode}
                 </TableCell>
                 <TableCell className="border px-6 py-4">
-                  {product.updatedAt}
+                  <div>
+                    {new Date(product.createdAt).toLocaleDateString("en-CA")}
+                    <span className="text-sm text-gray-500">&nbsp;at</span>{" "}
+                    {new Date(product.createdAt).toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </div>
                 </TableCell>
                 <TableCell className="border px-6 py-4">
                   <div className="flex gap-1 justify-center">
@@ -96,7 +104,9 @@ export const AllWinesTable = ({ products }: ProductTableProps) => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => router.push(`/edit-product/${product.id}`)}
+                      onClick={() =>
+                        router.push(`/admin/add-wines/${product.id}/edit`)
+                      }
                     >
                       <Edit className="h-4 w-4" />
                     </Button>

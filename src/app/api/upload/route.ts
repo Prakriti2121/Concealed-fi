@@ -1,7 +1,17 @@
 import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
-import { existsSync } from "fs";
+import { existsSync, statSync, readFileSync } from "fs";
+import sizeOf from "image-size";
+
+// Helper function to format bytes to a human-readable string.
+function formatBytes(bytes: number): string {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+}
 
 export async function POST(request: Request) {
   try {
@@ -36,10 +46,8 @@ export async function POST(request: Request) {
       await mkdir(uploadDir, { recursive: true });
     }
 
-    // Generate unique filename
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    const extension = file.name.split(".").pop();
-    const filename = `${uniqueSuffix}.${extension}`;
+    // Generate filename
+    const filename = file.name;
 
     // Define file path
     const filepath = join(uploadDir, filename);
@@ -47,9 +55,28 @@ export async function POST(request: Request) {
     // Write file to the directory
     await writeFile(filepath, buffer);
 
+    // Extract the current date and time for upload time
+    const uploadTime = new Date().toLocaleString();
+
+    // Calculate file stats and image dimensions
+    const stats = statSync(filepath);
+    const fileBuffer = readFileSync(filepath);
+    const dimensions = sizeOf(fileBuffer);
+    const formattedSize = formatBytes(stats.size);
+
+    const baseUrl =
+      process.env.NODE_ENV === "production"
+        ? "https://www.cwno.vittvin.nu"
+        : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+    // Respond with the full image details including size and fullUrl
     return NextResponse.json({
-      url: `/uploads/${filename}`, // Local path to use in frontend
+      url: `${baseUrl}/uploads/${filename}`,
       success: true,
+      name: filename,
+      uploadTime: uploadTime,
+      size: `${formattedSize} (${dimensions.width}x${dimensions.height})`,
+      fullUrl: `${baseUrl}/uploads/${filename}`,
     });
   } catch (error) {
     console.error("Upload error:", error);

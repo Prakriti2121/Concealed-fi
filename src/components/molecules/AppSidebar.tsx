@@ -33,7 +33,8 @@ import {
   Menu,
   X,
   MessageSquareMore,
-  FileText
+  ImageIcon,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -78,6 +79,11 @@ const items = [
     title: "Comments",
     icon: MessageSquareMore,
     url: "/admin/comments",
+  },
+  {
+    title: "Media",
+    icon: ImageIcon,
+    url: "/admin/media",
   },
   {
     title: "Teams",
