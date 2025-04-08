@@ -10,22 +10,27 @@ export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  const { id } = params;
+  const { id } = await params; // Await params before using it
+
   const session = await getServerSession(NEXT_AUTH_CONFIG);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
   const productId = Number(id);
   if (isNaN(productId)) {
     return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
   }
+
   try {
     const product = await prisma.product.findUnique({
       where: { id: productId },
     });
+
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
+
     return NextResponse.json(product);
   } catch (error) {
     console.error("Error fetching product:", error);
@@ -41,25 +46,49 @@ export async function PUT(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  const { id } = params;
+  const { id } = await params; // Await params before using it
+
   const session = await getServerSession(NEXT_AUTH_CONFIG);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
   const productId = Number(id);
   if (isNaN(productId)) {
     return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
   }
+
   try {
     // Parse the incoming form data (multipart/form-data)
     const formData = await req.formData();
     const data: any = {};
 
+    // List of keys that are booleans in your Prisma model
+    const booleanKeys = [
+      "isNew",
+      "availableOnlyOnline",
+      "organic",
+      "featured",
+      "vegetables",
+      "roastedVegetables",
+      "softCheese",
+      "hardCheese",
+      "starches",
+      "fish",
+      "richFish",
+      "whiteMeatPoultry",
+      "lambMeat",
+      "porkMeat",
+      "redMeatBeef",
+      "gameMeat",
+      "curedMeat",
+      "sweets",
+    ];
+
     for (const [key, value] of formData.entries()) {
       if (["price", "bottleVolume", "alcohol"].includes(key)) {
         data[key] = Number(value);
       } else if (key === "taste") {
-        // If taste is an empty string, set it as an empty array
         const strValue = value as string;
         if (strValue.trim() === "") {
           data[key] = [];
@@ -70,6 +99,11 @@ export async function PUT(
             data[key] = strValue;
           }
         }
+      } else if (booleanKeys.includes(key)) {
+        // Convert string "true"/"false" to boolean values
+        data[key] = value === "true";
+      } else if (value === "" || value === null) {
+        continue;
       } else {
         data[key] = value;
       }
@@ -80,8 +114,7 @@ export async function PUT(
       data,
     });
 
-    // Use nullish coalescing to guarantee an object is returned
-    return NextResponse.json(updatedProduct ?? {});
+    return NextResponse.json(updatedProduct);
   } catch (error) {
     console.error("Error updating product:", error);
     return NextResponse.json(

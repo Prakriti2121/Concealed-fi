@@ -44,8 +44,7 @@ model Product {
   buyLink             String // URL to buy the product
   sortiment           String // Tillfälliga sortimentet , Beställning sortimentet, Exklusiva sortimentet, Fasta Sortimentet
   tagLine             String
-  // producerDescription String @db.Text
-  producerDescription String @db.LongText
+  producerDescription String? @db.LongText // Optional field for producer description
 
   producerUrl    String // URL (or other meaning as required)
   region         String
