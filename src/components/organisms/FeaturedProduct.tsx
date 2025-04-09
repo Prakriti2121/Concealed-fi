@@ -1,53 +1,53 @@
-"use client"
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { EffectCoverflow, Autoplay, Navigation } from "swiper/modules"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { motion } from "motion/react"
+"use client";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Autoplay, Navigation } from "swiper/modules";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion } from "motion/react";
 
 // Import Swiper styles
-import "swiper/css"
-import "swiper/css/effect-coverflow"
-import "swiper/css/navigation"
-import Image from "next/image"
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/navigation";
+import Image from "next/image";
 
 // Define the Product type based on your Prisma schema
 interface Product {
-  id: number
-  title: string
-  price: number
-  largeImage: string
+  id: number;
+  title: string;
+  price: number;
+  largeImage: string;
 }
 
 const FeaturedProduct = () => {
-  const [isHovered, setIsHovered] = useState(false)
-  const [products, setProducts] = useState<Product[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [isHovered, setIsHovered] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setIsLoading(true)
-        const response = await fetch("/api/featured-products")
+        setIsLoading(true);
+        const response = await fetch("/api/featured-products");
 
         if (!response.ok) {
-          throw new Error("Failed to fetch products")
+          throw new Error("Failed to fetch products");
         }
 
-        const data = await response.json()
-        setProducts(data)
+        const data = await response.json();
+        setProducts(data);
       } catch (err) {
-        console.error("Error fetching products:", err)
-        setError("Failed to load products")
+        console.error("Error fetching products:", err);
+        setError("Failed to load products");
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    fetchProducts()
-  }, [])
+    fetchProducts();
+  }, []);
 
   // Show loading state
   if (isLoading) {
@@ -56,7 +56,7 @@ const FeaturedProduct = () => {
         <div className="text-5xl font-black mb-8">Ambitious Wine Importer</div>
         <div className="text-xl">Loading wines...</div>
       </div>
-    )
+    );
   }
 
   // Show error state
@@ -66,7 +66,7 @@ const FeaturedProduct = () => {
         <div className="text-5xl font-black mb-8">Ambitious Wine Importer</div>
         <div className="text-xl text-red-500">{error}</div>
       </div>
-    )
+    );
   }
 
   // Show empty state if no products at all
@@ -76,7 +76,7 @@ const FeaturedProduct = () => {
         <div className="text-5xl font-black mb-8">Ambitious Wine Importer</div>
         <div className="text-xl">No wines available at the moment.</div>
       </div>
-    )
+    );
   }
 
   return (
@@ -106,7 +106,11 @@ const FeaturedProduct = () => {
           </div>
         </div>
       </div>
-      <div className="relative py-12" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+      <div
+        className="relative py-12"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <Swiper
           effect="coverflow"
           grabCursor={true}
@@ -144,7 +148,10 @@ const FeaturedProduct = () => {
                     <div className="relative group">
                       <div className="flex justify-center">
                         <Image
-                          src={product.largeImage || "/placeholder.svg?height=400&width=300"}
+                          src={
+                            product.largeImage ||
+                            "/placeholder.svg?height=400&width=300"
+                          }
                           alt={product.title}
                           className={`w-auto h-96 object-contain transition-transform duration-500 ${
                             isActive ? "group-hover:scale-105" : ""
@@ -157,11 +164,13 @@ const FeaturedProduct = () => {
                   </div>
                   <div
                     className={`mt-4 transform transition-all duration-500 ${
-                      isActive ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
+                      isActive
+                        ? "translate-y-0 opacity-100"
+                        : "-translate-y-4 opacity-0"
                     } text-center w-full`}
                   >
                     <h3 className="text-2xl font-light">{product.title}</h3>
-                    <p className="text-lg mt-2">${product.price.toFixed(2)}</p>
+                    <p className="text-lg mt-2">€{product.price.toFixed(2)}</p>
                   </div>
                 </div>
               )}
@@ -213,7 +222,7 @@ const FeaturedProduct = () => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default FeaturedProduct
+export default FeaturedProduct;
