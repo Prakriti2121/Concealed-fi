@@ -1,67 +1,92 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Autoplay, Navigation } from "swiper/modules";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "motion/react";
+"use client"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { EffectCoverflow, Autoplay, Navigation } from "swiper/modules"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { motion } from "motion/react"
 
 // Import Swiper styles
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/navigation";
-import Image from "next/image";
+import "swiper/css"
+import "swiper/css/effect-coverflow"
+import "swiper/css/navigation"
+import Image from "next/image"
 
-const WineSlider = () => {
-  const [isHovered, setIsHovered] = useState(false);
+// Define the Product type based on your Prisma schema
+interface Product {
+  id: number
+  title: string
+  price: number
+  largeImage: string
+}
 
-  const featuredWines = [
-    {
-      id: 1,
-      name: "Cabernet Sauvignon",
-      price: 49.99,
-      image: "/images/wine1.webp",
-    },
-    {
-      id: 2,
-      name: "Chardonnay Reserve",
-      price: 39.99,
-      image: "/images/wine2.webp",
-    },
-    {
-      id: 3,
-      name: "Pinot Noir",
-      price: 44.99,
-      image: "/images/wine3.webp",
-    },
-    {
-      id: 4,
-      name: "Merlot Estate",
-      price: 54.99,
-      image: "/images/wine4.webp",
-    },
-    {
-      id: 5,
-      name: "Sauvignon Blanc",
-      price: 34.99,
-      image: "/images/wine5.webp",
-    },
-    {
-      id: 6,
-      name: "Sauvignon Blanc",
-      price: 34.99,
-      image: "/images/wine6.webp",
-    },
-  ];
+const FeaturedProduct = () => {
+  const [isHovered, setIsHovered] = useState(false)
+  const [products, setProducts] = useState<Product[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch("/api/featured-products")
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch products")
+        }
+
+        const data = await response.json()
+        setProducts(data)
+      } catch (err) {
+        console.error("Error fetching products:", err)
+        setError("Failed to load products")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
+        <div className="text-5xl font-black mb-8">Ambitious Wine Importer</div>
+        <div className="text-xl">Loading wines...</div>
+      </div>
+    )
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
+        <div className="text-5xl font-black mb-8">Ambitious Wine Importer</div>
+        <div className="text-xl text-red-500">{error}</div>
+      </div>
+    )
+  }
+
+  // Show empty state if no products at all
+  if (products.length === 0) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
+        <div className="text-5xl font-black mb-8">Ambitious Wine Importer</div>
+        <div className="text-xl">No wines available at the moment.</div>
+      </div>
+    )
+  }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 ">
+    <div className="max-w-6xl mx-auto px-4">
       <div className="md:mt-40">
         <motion.div
           className="text-5xl text-center font-black"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.5 }} // triggers when 50% of the component is in view
+          viewport={{ once: false, amount: 0.5 }}
           transition={{ duration: 0.5 }}
         >
           Ambitious Wine Importer
@@ -72,7 +97,7 @@ const WineSlider = () => {
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.5 }} // triggers when 50% of the component is in view
+              viewport={{ once: false, amount: 0.5 }}
               transition={{ duration: 0.5 }}
               className="text-2xl border-b border-black inline-block text-center mt-6"
             >
@@ -81,17 +106,13 @@ const WineSlider = () => {
           </div>
         </div>
       </div>
-      <div
-        className="relative py-12"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+      <div className="relative py-12" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
         <Swiper
           effect="coverflow"
           grabCursor={true}
           centeredSlides={true}
           slidesPerView={3}
-          loop={true}
+          loop={products.length > 3}
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
@@ -111,12 +132,10 @@ const WineSlider = () => {
           modules={[EffectCoverflow, Autoplay, Navigation]}
           className="wine-swiper"
         >
-          {featuredWines.map((wine) => (
-            <SwiperSlide key={wine.id}>
+          {products.map((product) => (
+            <SwiperSlide key={product.id}>
               {({ isActive }) => (
                 <div className="flex flex-col items-center">
-                  {" "}
-                  {/* Added container */}
                   <div
                     className={`transform transition-all duration-500 ${
                       isActive ? "scale-100" : "scale-75 opacity-50"
@@ -124,12 +143,10 @@ const WineSlider = () => {
                   >
                     <div className="relative group">
                       <div className="flex justify-center">
-                        {" "}
-                        {/* Centering container */}
                         <Image
-                          src={wine.image}
-                          alt={wine.name}
-                          className={`w-64 h-96 object-cover transition-transform duration-500 ${
+                          src={product.largeImage || "/placeholder.svg?height=400&width=300"}
+                          alt={product.title}
+                          className={`w-auto h-96 object-contain transition-transform duration-500 ${
                             isActive ? "group-hover:scale-105" : ""
                           }`}
                           width={300}
@@ -140,13 +157,11 @@ const WineSlider = () => {
                   </div>
                   <div
                     className={`mt-4 transform transition-all duration-500 ${
-                      isActive
-                        ? "translate-y-0 opacity-100"
-                        : "-translate-y-4 opacity-0"
+                      isActive ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
                     } text-center w-full`}
                   >
-                    <h3 className="text-2xl font-light">{wine.name}</h3>
-                    <p className="text-lg mt-2">${wine.price}</p>
+                    <h3 className="text-2xl font-light">{product.title}</h3>
+                    <p className="text-lg mt-2">${product.price.toFixed(2)}</p>
                   </div>
                 </div>
               )}
@@ -156,14 +171,14 @@ const WineSlider = () => {
 
         {/* Custom Navigation Buttons */}
         <button
-          className={`swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2    transition-all duration-300 ${
+          className={`swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
             isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
           }`}
         >
           <ChevronLeft className="w-12 h-12" />
         </button>
         <button
-          className={`swiper-button-next absolute right-0 top-1/2 -translate-y-1/2     transition-all duration-300 ${
+          className={`swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
             isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
           }`}
         >
@@ -173,7 +188,7 @@ const WineSlider = () => {
 
       <div className="flex justify-center mt-8">
         <Link
-          href="#"
+          href="/viinit-luettelo"
           className="text-xl text-center inline-block bg-black text-white px-6 py-2 rounded-3xl hover:bg-white hover:text-black hover:border border-black hover:scale-90 transition-all duration-300 ease-in-out"
         >
           View All Wines
@@ -190,15 +205,15 @@ const WineSlider = () => {
         }
         .swiper-slide {
           transition: all 0.3s ease;
-          display: flex; /* Added for better centering */
-          justify-content: center; /* Center slide content */
+          display: flex;
+          justify-content: center;
         }
         .swiper-slide-active {
           z-index: 1;
         }
       `}</style>
     </div>
-  );
-};
+  )
+}
 
-export default WineSlider;
+export default FeaturedProduct
