@@ -1,4 +1,5 @@
 import AboutUs from "@/components/molecules/AboutUs";
+import BannerSection from "@/components/molecules/BannerSection";
 import OurWines from "@/components/molecules/OurWines";
 import WineArticles from "@/components/molecules/WineArticles";
 import FeaturedProduct from "@/components/organisms/FeaturedProduct";
@@ -25,6 +26,7 @@ export default async function Home() {
 
   return (
     <div>
+      <BannerSection />
       <Jumbotron />
       <FeaturedProduct />
       <div className="mt-64">
