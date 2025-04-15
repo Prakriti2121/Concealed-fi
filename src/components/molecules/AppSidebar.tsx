@@ -32,6 +32,7 @@ import {
   ChevronRight,
   Menu,
   X,
+  AppWindowMac,
   MessageSquareMore,
   ImageIcon,
   FileText,
@@ -45,6 +46,11 @@ const items = [
     title: "Home",
     url: "/",
     icon: Home,
+  },
+  {
+    title: "Banner",
+    icon: AppWindowMac,
+    url: "/admin/banner",
   },
   {
     title: "Products",

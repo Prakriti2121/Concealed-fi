@@ -75,7 +75,7 @@ export function TeamContent() {
     <div className="container mx-auto my-6 px-4">
       <BreadCrumb title1="Tiimimme" />
       <div className="flex flex-col md:flex-row gap-8 relative">
-        {/* Main Content - Take 2/3 of the width on medium screens and up */}
+        {/* Main Content */}
         <div className="w-full md:w-3/4">
           <div className="grid gap-6 sm:gap-8 md:gap-10">
             {teamMembers.map((member) => (
@@ -89,7 +89,7 @@ export function TeamContent() {
                       <Image
                         src={member.image || "/placeholder.svg"}
                         alt={member.name}
-                        className="object-center"
+                        className="object-cover"
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 768px) 33vw, 25vw"
                         priority
@@ -124,7 +124,7 @@ export function TeamContent() {
           </div>
         </div>
 
-        {/* Sidebar - Take 1/3 of the width on medium screens and up */}
+        {/* Sidebar */}
         <div className="w-full md:w-1/4 md:sticky md:top-6 md:self-start">
           <SidebarContent limit={6} />
         </div>
