@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -24,8 +21,8 @@ model User {
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-
+  id    Int    @id @default(autoincrement())
+  slug  String @unique @default(cuid())
   title String @default("Untitled Product")
 
   // Wine Fields
@@ -42,7 +39,7 @@ model Product {
   // Additional Product Info
   largeImage          String // URL of large image
   buyLink             String // URL to buy the product
-  sortiment           String // Tillfälliga sortimentet , Beställning sortimentet, Exklusiva sortimentet, Fasta Sortimentet
+  sortiment           String
   tagLine             String
   producerDescription String? @db.LongText // Optional field for producer description
 
