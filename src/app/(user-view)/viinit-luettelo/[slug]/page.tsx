@@ -23,6 +23,7 @@ import Link from "next/link";
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+export const revalidate = 0;
 
 export default async function Page({ params }: PageProps) {
   // Await the params promise
@@ -190,7 +191,7 @@ export default async function Page({ params }: PageProps) {
               <span className="text-gray-500 font-medium flex items-center">
                 <Percent size={16} className="mr-1" /> Alcohol
               </span>
-              <span>{product.alcohol}% Vol.</span>
+              <span>{product.alcohol}%</span>
             </div>
           </div>
 
@@ -259,7 +260,7 @@ export default async function Page({ params }: PageProps) {
                   </div>
                   <div>
                     <p className="text-gray-500 mb-1">Alcohol</p>
-                    <p>{product.alcohol}% Vol.</p>
+                    <p>{product.alcohol}%</p>
                   </div>
                   <div>
                     <p className="text-gray-500 mb-1">Closure</p>

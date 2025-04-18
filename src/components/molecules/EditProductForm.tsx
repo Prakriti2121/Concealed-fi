@@ -76,13 +76,15 @@ const productSchema = z.object({
   composition: z.string().optional(),
   closure: z.string().optional(),
 });
-
 export type ProductFormValues = z.infer<typeof productSchema>;
 
 export default function EditProductForm() {
   const { id } = useParams();
   const router = useRouter();
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // ← NEW: a key to remount TiptapEditor after form.reset()
+  const [descKey, setDescKey] = useState(0);
 
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
@@ -126,7 +128,7 @@ export default function EditProductForm() {
     },
   });
 
-  // Clean up preview URL
+  // Clean up preview URL on unmount or URL change
   useEffect(() => {
     return () => {
       if (previewUrl) {
@@ -135,7 +137,7 @@ export default function EditProductForm() {
     };
   }, [previewUrl]);
 
-  // Fetch product data and reset form values
+  // Fetch product data, reset form, bump descKey, set preview
   useEffect(() => {
     if (!id) return;
     const fetchProduct = async () => {
@@ -143,6 +145,7 @@ export default function EditProductForm() {
         const response = await fetch(`/api/products/${id}`);
         if (!response.ok) throw new Error("Failed to fetch product");
         const data = await response.json();
+
         form.reset({
           title: data.title || "",
           isNew: data.isNew || false,
@@ -151,7 +154,7 @@ export default function EditProductForm() {
           featured: data.featured || false,
           productCode: data.productCode || "",
           vintage: data.vintage || "",
-          price: data.price || 0,
+          price: data.price ?? 0,
           buyLink: data.buyLink || "",
           sortiment: data.sortiment || "",
           tagLine: data.tagLine || "",
@@ -175,11 +178,15 @@ export default function EditProductForm() {
           gameMeat: data.gameMeat || false,
           curedMeat: data.curedMeat || false,
           sweets: data.sweets || false,
-          bottleVolume: data.bottleVolume || 0,
-          alcohol: data.alcohol || 0,
+          bottleVolume: data.bottleVolume ?? 0,
+          alcohol: data.alcohol ?? 0,
           composition: data.composition || "",
           closure: data.closure || "",
         });
+
+        // ← bump the key so TiptapEditor re-mounts with new content
+        setDescKey((k) => k + 1);
+
         if (data.largeImage) {
           setPreviewUrl(data.largeImage);
         }
@@ -191,17 +198,15 @@ export default function EditProductForm() {
     fetchProduct();
   }, [id, form]);
 
-  // Updated onSubmit handler that checks for a new file upload
+  // Submit handler — unmodified except always append producerDescription
   const onSubmit = async (data: ProductFormValues) => {
     try {
       const formData = new FormData();
 
-      // Handle producerDescription
-      if (data.producerDescription) {
-        formData.append("producerDescription", data.producerDescription);
-      }
+      // Always include producerDescription (even empty)
+      formData.append("producerDescription", data.producerDescription ?? "");
 
-      // Handle largeImage: if a new file is provided, upload it first
+      // Handle largeImage upload or existing URL
       if (data.largeImage instanceof File) {
         const uploadFormData = new FormData();
         uploadFormData.append("file", data.largeImage);
@@ -213,23 +218,20 @@ export default function EditProductForm() {
           throw new Error("Image upload failed");
         }
         const uploadData = await uploadResponse.json();
-        // Append the returned URL to our update payload instead of the File object
         formData.append("largeImage", uploadData.url);
       } else if (previewUrl) {
-        // No new file selected—use the existing image URL
         formData.append("largeImage", previewUrl);
       }
 
-      // Append remaining fields (skip producerDescription and largeImage)
+      // Append all other fields
       Object.entries(data).forEach(([key, value]) => {
-        if (key !== "producerDescription" && key !== "largeImage") {
-          if (Array.isArray(value)) {
-            formData.append(key, JSON.stringify(value));
-          } else if (value instanceof File) {
-            formData.append(key, value);
-          } else if (value !== undefined && value !== null) {
-            formData.append(key, String(value));
-          }
+        if (key === "producerDescription" || key === "largeImage") return;
+        if (Array.isArray(value)) {
+          formData.append(key, JSON.stringify(value));
+        } else if (value instanceof File) {
+          formData.append(key, value);
+        } else if (value !== undefined && value !== null) {
+          formData.append(key, String(value));
         }
       });
 
@@ -251,7 +253,7 @@ export default function EditProductForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Layout similar to AddProductForm */}
+        {/* --- Wine Fields --- */}
         <hr />
         <p className="text-xl font-bold">Wine Fields</p>
         <div className="grid grid-cols-2 gap-4">
@@ -311,7 +313,7 @@ export default function EditProductForm() {
           />
         </div>
 
-        {/* Product Details */}
+        {/* --- Product Details --- */}
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -364,10 +366,8 @@ export default function EditProductForm() {
                     placeholder="Price"
                     value={field.value ?? ""}
                     onChange={(e) => {
-                      const value = e.target.value;
-                      field.onChange(
-                        value === "" ? "" : Number.parseFloat(value)
-                      );
+                      const val = e.target.value;
+                      field.onChange(val === "" ? "" : Number.parseFloat(val));
                     }}
                   />
                 </FormControl>
@@ -489,7 +489,7 @@ export default function EditProductForm() {
           />
         </div>
 
-        {/* Additional Product Info */}
+        {/* --- Additional Product Info --- */}
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -516,7 +516,7 @@ export default function EditProductForm() {
                     {previewUrl && (
                       <div className="relative w-40 h-40">
                         <Image
-                          src={previewUrl || "/placeholder.svg"}
+                          src={previewUrl}
                           alt="Preview"
                           fill
                           className="object-contain"
@@ -544,7 +544,7 @@ export default function EditProductForm() {
           />
         </div>
 
-        {/* Producer Description with Tiptap Editor */}
+        {/* --- Producer Description with Tiptap Editor --- */}
         <FormField
           control={form.control}
           name="producerDescription"
@@ -554,6 +554,7 @@ export default function EditProductForm() {
               <FormControl>
                 <div className="border rounded-md min-h-[200px]">
                   <TiptapEditor
+                    key={descKey}
                     content={field.value}
                     onUpdate={({ editor }) => field.onChange(editor.getHTML())}
                   />
@@ -564,7 +565,7 @@ export default function EditProductForm() {
           )}
         />
 
-        {/* Food Combinations (checkboxes) */}
+        {/* --- Food Combinations (checkboxes) --- */}
         <hr />
         <p className="text-xl font-bold">Food Combinations</p>
         <div className="grid grid-cols-2 gap-4">
@@ -601,7 +602,7 @@ export default function EditProductForm() {
           ))}
         </div>
 
-        {/* Other specifications */}
+        {/* --- Other specifications --- */}
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -641,10 +642,8 @@ export default function EditProductForm() {
                     placeholder="Bottle Volume"
                     value={field.value ?? ""}
                     onChange={(e) => {
-                      const value = e.target.value;
-                      field.onChange(
-                        value === "" ? "" : Number.parseFloat(value)
-                      );
+                      const val = e.target.value;
+                      field.onChange(val === "" ? "" : Number.parseFloat(val));
                     }}
                   />
                 </FormControl>
@@ -664,10 +663,8 @@ export default function EditProductForm() {
                     placeholder="Alcohol"
                     value={field.value ?? ""}
                     onChange={(e) => {
-                      const value = e.target.value;
-                      field.onChange(
-                        value === "" ? "" : Number.parseFloat(value)
-                      );
+                      const val = e.target.value;
+                      field.onChange(val === "" ? "" : Number.parseFloat(val));
                     }}
                   />
                 </FormControl>
