@@ -3,16 +3,38 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const page = async () => {
+interface PageProps {
+  searchParams: {
+    page?: string;
+  };
+}
+
+const PRODUCTS_PER_PAGE = 9;
+
+const page = async ({ searchParams }: PageProps) => {
   const allWines = await getAllProducts();
+
+  // Determine current page from ?page= query, defaulting to 1
+  const rawPage = parseInt(searchParams.page || "1", 10);
+  const currentPage = isNaN(rawPage) || rawPage < 1 ? 1 : rawPage;
+
+  const totalProducts = allWines.length;
+  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
+
+  // Clamp currentPage so it never exceeds totalPages
+  const safePage = Math.min(currentPage, totalPages);
+
+  const startIndex = (safePage - 1) * PRODUCTS_PER_PAGE;
+  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+  const displayedWines = allWines.slice(startIndex, endIndex);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl md:text-4xl font-black mb-8">All Wines</h1>
 
-      {allWines && (
+      {displayedWines.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allWines.map((wine) => (
+          {displayedWines.map((wine) => (
             <div
               key={wine.id}
               className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
@@ -69,7 +91,32 @@ const page = async () => {
             </div>
           ))}
         </div>
+      ) : (
+        <p>No wines found.</p>
       )}
+
+      {/* Pagination controls */}
+      <div className="flex justify-center items-center space-x-4 mt-8">
+        {safePage > 1 && (
+          <Link
+            href={`?page=${safePage - 1}`}
+            className="px-3 py-1 border rounded hover:bg-gray-100"
+          >
+            Previous
+          </Link>
+        )}
+        <span>
+          Page {safePage} of {totalPages}
+        </span>
+        {safePage < totalPages && (
+          <Link
+            href={`?page=${safePage + 1}`}
+            className="px-3 py-1 border rounded hover:bg-gray-100"
+          >
+            Next
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

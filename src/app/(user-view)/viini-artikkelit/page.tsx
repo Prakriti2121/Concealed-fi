@@ -1,4 +1,3 @@
-// File: app/senaste-nytt/page.tsx
 import React from "react";
 import { ArticleContent } from "./components/ArticleContent";
 
