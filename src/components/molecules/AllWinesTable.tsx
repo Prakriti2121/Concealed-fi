@@ -67,7 +67,7 @@ export const AllWinesTable = ({ products }: ProductTableProps) => {
                 </TableCell>
                 <TableCell className="border px-6 py-4 font-medium">
                   <Link
-                    href={`/viinit-luettelo/${product.id}`}
+                    href={`/admin/add-wines/${product.id}/edit`}
                     className="hover:underline"
                   >
                     {product.title}

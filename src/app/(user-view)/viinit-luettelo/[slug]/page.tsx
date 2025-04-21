@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  Home,
-  Share2,
   Wine,
   Tag,
   GlassWater,
@@ -17,8 +15,10 @@ import {
   MapPin,
   Percent,
   Package,
+  Grape,
 } from "lucide-react";
-import Link from "next/link";
+import BreadCrumb from "../../components/breadcrumb/breadcrumb";
+import SharePopover from "../components/SharePopover";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -43,7 +43,7 @@ export default async function Page({ params }: PageProps) {
 
   // Function to generate food pairing badges
   const getFoodPairings = () => {
-    const pairings = [];
+    const pairings: string[] = [];
     if (product.vegetables) pairings.push("Vegetables");
     if (product.roastedVegetables) pairings.push("Roasted Vegetables");
     if (product.softCheese) pairings.push("Soft Cheese");
@@ -65,23 +65,19 @@ export default async function Page({ params }: PageProps) {
     <div className="container mx-auto px-4 py-8">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 mb-6 text-sm">
-        <Link
-          href="/"
-          className="text-gray-600 hover:text-gray-900 flex items-center"
-        >
-          <Home size={16} className="mr-1" />
-          Home
-        </Link>
-        <span className="text-gray-400">/</span>
-        <span className="font-medium">{product.title}</span>
+        <BreadCrumb
+          title1="Viinit-luettelo"
+          link1="/viinit-luettelo"
+          title2={product.title}
+        />
       </div>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left Column - Image */}
+        {/* Left Column – Image */}
         <div className="relative h-full flex items-center justify-center">
           <Card className="w-full h-full p-4 flex items-center justify-center">
-            <div className="w-64 h-full relative">
+            <div className="w-64 h-full relative flex items-center justify-center">
               <Image
                 src={product.largeImage || "/placeholder-wine.png"}
                 alt={product.title}
@@ -94,9 +90,9 @@ export default async function Page({ params }: PageProps) {
           </Card>
         </div>
 
-        {/* Right Column - Details */}
+        {/* Right Column – Details */}
         <div>
-          {/* Title and Badges */}
+          {/* Title & Badges */}
           <div className="mb-6">
             <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
             {product.tagLine && (
@@ -141,7 +137,7 @@ export default async function Page({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Price and Buy Button */}
+          {/* Price & Buy */}
           <div className="flex items-center justify-between mb-6">
             <div>
               <p className="text-3xl font-bold">{product.price.toFixed(2)} €</p>
@@ -168,7 +164,7 @@ export default async function Page({ params }: PageProps) {
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="flex flex-col">
               <span className="text-gray-500 font-medium flex items-center">
-                <Wine size={16} className="mr-1" /> Producer
+                <Grape size={16} className="mr-1" /> Producer
               </span>
               <a
                 href={product.producerUrl}
@@ -184,7 +180,9 @@ export default async function Page({ params }: PageProps) {
               <span>{product.region}</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-gray-500 font-medium">Vintage</span>
+              <span className="text-gray-500 font-medium flex items-center">
+                <Wine size={16} className="mr-1" /> Vintage
+              </span>
               <span>{product.vintage}</span>
             </div>
             <div className="flex flex-col">
@@ -209,14 +207,9 @@ export default async function Page({ params }: PageProps) {
             </CardContent>
           </Card>
 
-          {/* Social Share */}
-          <div className="flex items-center space-x-2 mt-4 mb-6">
-            <span className="text-gray-500 font-medium">Share:</span>
-            <div className="flex space-x-2">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <Share2 size={16} />
-              </Button>
-            </div>
+          {/* Share Button (client-only) */}
+          <div className="mt-6 mb-6">
+            <SharePopover title={product.title} />
           </div>
         </div>
       </div>
@@ -323,7 +316,7 @@ export default async function Page({ params }: PageProps) {
         </div>
       </div>
 
-      {/* Last updated info */}
+      {/* Last updated */}
       <div className="mt-8 text-sm text-gray-500 flex items-center">
         <Info size={14} className="mr-1" />
         Last updated: {new Date(product.updatedAt).toLocaleDateString()}
