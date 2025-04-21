@@ -19,29 +19,65 @@ import {
 } from "lucide-react";
 import BreadCrumb from "../../components/breadcrumb/breadcrumb";
 import SharePopover from "../components/SharePopover";
+import { Metadata } from "next";
 
-type PageProps = {
-  params: Promise<{ slug: string }>;
-};
 export const revalidate = 0;
 
-export default async function Page({ params }: PageProps) {
-  // Await the params promise
-  const { slug } = await params;
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
 
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = params;
   const product = await getWineBySlug(slug);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+      description: "",
+    };
+  }
+
+  const seoTitle = product.title;
+  const description = product.tagLine ?? "";
+
+  // Build canonical URL
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000");
+  const canonicalUrl = `${baseUrl}/viinit-luettelo/${slug}`;
+
+  return {
+    title: seoTitle,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  };
+}
+
+export default async function Page({ params }: PageProps) {
+  const { slug } = params;
+  const product = await getWineBySlug(slug);
+
   if (!product) {
     return <div>Product not found!</div>;
   }
 
-  // Parse taste data from JSON if needed
+  // Parse taste data
   const tasteArray = Array.isArray(product.taste)
     ? product.taste
     : typeof product.taste === "string"
     ? JSON.parse(product.taste)
     : Object.values(product.taste || {});
 
-  // Function to generate food pairing badges
+  // Build food pairings array
   const getFoodPairings = () => {
     const pairings: string[] = [];
     if (product.vegetables) pairings.push("Vegetables");
@@ -74,7 +110,7 @@ export default async function Page({ params }: PageProps) {
 
       {/* Main Content */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left Column – Image */}
+        {/* Left: Image */}
         <div className="relative h-full flex items-center justify-center">
           <Card className="w-full h-full p-4 flex items-center justify-center">
             <div className="w-64 h-full relative flex items-center justify-center">
@@ -90,7 +126,7 @@ export default async function Page({ params }: PageProps) {
           </Card>
         </div>
 
-        {/* Right Column – Details */}
+        {/* Right: Details */}
         <div>
           {/* Title & Badges */}
           <div className="mb-6">

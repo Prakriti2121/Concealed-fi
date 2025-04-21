@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     const page = await prisma.page.findUnique({
-      where: { slug: "viinit-artikkelit" },
+      where: { slug: "etusivu" },
     });
 
     if (!page) {
@@ -15,12 +15,12 @@ export async function GET() {
 
     return NextResponse.json({
       title: page.title,
-      content: page.content,
-      featuredImage: page.featuredImage,
+      seoTitle: page.seoTitle,
+      metaDesc: page.metaDesc,
       canonicalUrl: page.canonicalUrl,
     });
   } catch (error) {
-    console.error("Error fetching wine articles page:", error);
+    console.error("Error fetching page:", error);
     return NextResponse.json({ error: "Error fetching page" }, { status: 500 });
   }
 }

@@ -1,6 +1,7 @@
 import { getAllProducts } from "@/lib/actions/product.actions";
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
 import React from "react";
 
 interface PageProps {
@@ -9,40 +10,74 @@ interface PageProps {
   };
 }
 
+interface SeoData {
+  title: string;
+  seoTitle: string;
+  metaDesc: string;
+  canonicalUrl: string;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  // Build your absolute base URL
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "") ||
+    "http://localhost:3000";
+
+  // Fetch your page’s SEO data
+  const res = await fetch(`${baseUrl}/api/viinit`, {
+    cache: "no-cache",
+  });
+
+  if (!res.ok) {
+    // fallback values
+    return {
+      title: "All Wines",
+      description: "Browse our full catalog of wines.",
+    };
+  }
+
+  const data: SeoData = await res.json();
+
+  return {
+    title: data.seoTitle || data.title,
+    description: data.metaDesc || "Browse our full catalog of wines.",
+    alternates: {
+      canonical: data.canonicalUrl || baseUrl,
+    },
+  };
+}
+
 const PRODUCTS_PER_PAGE = 9;
 
-const page = async ({ searchParams }: PageProps) => {
+export default async function Page({ searchParams }: PageProps) {
+  // parse & clamp page number
+  const raw = parseInt(searchParams.page ?? "1", 10);
+  const currentPage = isNaN(raw) || raw < 1 ? 1 : raw;
+
+  // fetch products
   const allWines = await getAllProducts();
-
-  // Determine current page from ?page= query, defaulting to 1
-  const rawPage = parseInt(searchParams.page || "1", 10);
-  const currentPage = isNaN(rawPage) || rawPage < 1 ? 1 : rawPage;
-
-  const totalProducts = allWines.length;
-  const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
-
-  // Clamp currentPage so it never exceeds totalPages
+  const totalPages = Math.ceil(allWines.length / PRODUCTS_PER_PAGE);
   const safePage = Math.min(currentPage, totalPages);
-
-  const startIndex = (safePage - 1) * PRODUCTS_PER_PAGE;
-  const endIndex = startIndex + PRODUCTS_PER_PAGE;
-  const displayedWines = allWines.slice(startIndex, endIndex);
+  const start = (safePage - 1) * PRODUCTS_PER_PAGE;
+  const displayed = allWines.slice(start, start + PRODUCTS_PER_PAGE);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl md:text-4xl font-black mb-8">All Wines</h1>
 
-      {displayedWines.length > 0 ? (
+      {displayed.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedWines.map((wine) => (
+          {displayed.map((wine) => (
             <div
               key={wine.id}
               className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
             >
               <div className="flex flex-col md:flex-row">
+                {/* Image */}
                 <div className="w-full md:w-1/3 flex justify-center items-center p-4 bg-white">
                   <Link href={`/viinit-luettelo/${wine.slug}`}>
-                    <div className="relative h-48 w-32">
+                    <div className="relative h-48 w-32 cursor-pointer">
                       <Image
                         src={wine.largeImage}
                         alt={wine.title || "Wine"}
@@ -53,6 +88,8 @@ const page = async ({ searchParams }: PageProps) => {
                     </div>
                   </Link>
                 </div>
+
+                {/* Details */}
                 <div className="w-full md:w-2/3 p-4 flex flex-col justify-between">
                   <div>
                     <Link
@@ -80,9 +117,12 @@ const page = async ({ searchParams }: PageProps) => {
 
                       <div className="text-sm">
                         Saatavana Alkon myymälöiden •{" "}
-                        <span className="text-green-900">
-                          <Link href={wine.buyLink}>Etsi lähin myymälä</Link>
-                        </span>
+                        <Link
+                          href={wine.buyLink}
+                          className="text-green-900 hover:underline"
+                        >
+                          Etsi lähin myymälä
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -95,7 +135,7 @@ const page = async ({ searchParams }: PageProps) => {
         <p>No wines found.</p>
       )}
 
-      {/* Pagination controls */}
+      {/* Pagination */}
       <div className="flex justify-center items-center space-x-4 mt-8">
         {safePage > 1 && (
           <Link
@@ -119,6 +159,4 @@ const page = async ({ searchParams }: PageProps) => {
       </div>
     </div>
   );
-};
-
-export default page;
+}

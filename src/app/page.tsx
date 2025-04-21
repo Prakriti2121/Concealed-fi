@@ -4,10 +4,23 @@ import OurWines from "@/components/molecules/OurWines";
 import WineArticles from "@/components/molecules/WineArticles";
 import FeaturedProduct from "@/components/organisms/FeaturedProduct";
 import Jumbotron from "@/components/organisms/Jumbotron";
+import { Metadata } from "next";
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+export async function generateMetadata(): Promise<Metadata> {
+  const resSeo = await fetch(`${baseUrl}/api/etusivu`, { cache: "no-cache" });
+  const seoData = await resSeo.json();
+
+  return {
+    title: seoData.seoTitle || seoData.title,
+    description: seoData.metaDesc,
+    alternates: {
+      canonical: seoData.canonicalUrl,
+    },
+  };
+}
 
 export default async function Home() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
   // Fetch About Us data
   const resAbout = await fetch(`${baseUrl}/api/meista`, { cache: "no-cache" });
   const aboutUsData = await resAbout.json();
