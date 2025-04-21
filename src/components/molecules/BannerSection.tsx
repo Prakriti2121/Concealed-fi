@@ -200,7 +200,7 @@ export default function BannerSection() {
                       href={featuredProducts[currentIndex]?.link || "#"}
                       className="inline-block bg-white text-black px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors duration-300 font-medium"
                     >
-                      Buy Now
+                      Osta nyt
                     </Link>
                   </div>
                 </div>

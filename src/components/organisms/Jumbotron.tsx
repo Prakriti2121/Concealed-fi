@@ -1,5 +1,7 @@
 "use client";
+
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { motion } from "motion/react";
@@ -10,40 +12,38 @@ interface Product {
   price: number;
   largeImage: string;
   taste?: string;
+  slug: string;
 }
 
 const Jumbotron = () => {
-  // State to hold the latest product
+  const router = useRouter();
   const [latestProduct, setLatestProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch the newest product from the API
   useEffect(() => {
     const fetchLatestProduct = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("/api/featured-products");
-        if (!response.ok) {
-          throw new Error("Failed to fetch product");
-        }
-        const products: Product[] = await response.json();
-        if (products.length > 0) {
-          setLatestProduct(products[0]);
-        }
+        const res = await fetch("/api/featured-products");
+        if (!res.ok) throw new Error("Failed to fetch product");
+        const products: Product[] = await res.json();
+        if (products.length) setLatestProduct(products[0]);
       } catch (err: any) {
-        console.error("Error fetching latest product:", err);
+        console.error(err);
         setError(err.message || "Error fetching product");
       } finally {
-        // Add a slight delay to ensure loading state is visible
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 800);
+        setTimeout(() => setIsLoading(false), 800);
       }
     };
-
     fetchLatestProduct();
   }, []);
+
+  const handleReadMore = () => {
+    if (latestProduct) {
+      router.push(`/viinit-luettelo/${latestProduct.slug}`);
+    }
+  };
 
   return (
     <div className="container mx-auto flex items-center min-h-screen px-4 sm:px-6 py-12 sm:py-16 md:py-0 overflow-hidden">
@@ -76,15 +76,18 @@ const Jumbotron = () => {
                 >
                   {latestProduct.taste}
                 </motion.p>
-                <Button className="relative overflow-hidden bg-[#09090B] text-lg sm:text-xl px-3 sm:px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black">
+                <Button
+                  onClick={handleReadMore}
+                  className="relative overflow-hidden bg-[#09090B] text-lg sm:text-xl px-3 sm:px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black"
+                >
                   <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
-                    Read More
+                    Lue lisää
                   </span>
                   <span className="absolute left-0 top-0 w-0 h-full bg-white transition-all duration-500 ease-in-out group-hover:w-full"></span>
                 </Button>
               </>
             ) : (
-              // Fallback static content if no product is fetched
+              // Fallback static content
               <>
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
@@ -109,16 +112,19 @@ const Jumbotron = () => {
                   these wines. Crisp freshness makes them ideal for a variety of
                   foods.
                 </motion.p>
-                <Button className="relative overflow-hidden bg-[#09090B] text-lg sm:text-xl px-3 sm:px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black">
+                <Button
+                  onClick={() => router.push("/viinit-luettelo/default-slug")}
+                  className="relative overflow-hidden bg-[#09090B] text-lg sm:text-xl px-3 sm:px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black"
+                >
                   <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
-                    Read More
+                    Lue lisää
                   </span>
                   <span className="absolute left-0 top-0 w-0 h-full bg-white transition-all duration-500 ease-in-out group-hover:w-full"></span>
                 </Button>
               </>
             )}
           </div>
-          <div className="-z-10 order-1 md:order-2 ml-0 sm:ml-10 md:ml-0 flex justify-center items-center">
+          <div className="-z-10 order-1 md:order-2 flex justify-center items-center">
             <div className="rotate-[30deg] transform-gpu">
               {!isLoading &&
                 (latestProduct ? (

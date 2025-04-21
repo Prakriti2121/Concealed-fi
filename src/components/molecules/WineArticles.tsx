@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Container from "@/components/atoms/Container";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import Link from "next/link";
 
 interface WineArticlesProps {
   data: {
@@ -72,12 +73,14 @@ const WineArticles: React.FC<WineArticlesProps> = ({ data }) => {
           </div>
 
           <div className="pt-4">
-            <Button className="relative overflow-hidden bg-[#09090B] text-xl px-6 py-3 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black">
-              <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
-              Lue lisää
-              </span>
-              <span className="absolute left-0 top-0 w-0 h-full bg-white transition-all duration-500 ease-in-out group-hover:w-full"></span>
-            </Button>
+            <Link href="./viini-artikkelit">
+              <Button className="relative overflow-hidden bg-[#09090B] text-xl px-6 py-3 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black">
+                <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
+                  Lue lisää
+                </span>
+                <span className="absolute left-0 top-0 w-0 h-full bg-white transition-all duration-500 ease-in-out group-hover:w-full"></span>
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </motion.div>
