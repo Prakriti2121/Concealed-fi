@@ -25,15 +25,18 @@ const Jumbotron = () => {
     const fetchLatestProduct = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch("/api/featured-products");
+        // only take 1 (the very latest)
+        const res = await fetch("/api/featured-products?take=1");
         if (!res.ok) throw new Error("Failed to fetch product");
         const products: Product[] = await res.json();
-        if (products.length) setLatestProduct(products[0]);
+        if (products.length) {
+          setLatestProduct(products[0]);
+        }
       } catch (err: any) {
         console.error(err);
         setError(err.message || "Error fetching product");
       } finally {
-        setTimeout(() => setIsLoading(false), 800);
+        setTimeout(() => setIsLoading(false), 300);
       }
     };
     fetchLatestProduct();

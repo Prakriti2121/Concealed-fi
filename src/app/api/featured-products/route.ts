@@ -1,21 +1,28 @@
-import { NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    // Fetch the first 6 products without any filtering
-    const products = await prisma.product.findMany({
-      take: 6, // Limit to 6 products
-      orderBy: {
-        createdAt: "desc", // Show newest first
-      },
-    })
+    const url = new URL(request.url);
+    const skip = parseInt(url.searchParams.get("skip") || "0", 10);
+    const take = parseInt(url.searchParams.get("take") || "5", 10);
 
-    return NextResponse.json(products)
+    const products = await prisma.product.findMany({
+      skip,
+      take,
+      orderBy: {
+        createdAt: "desc", // newest first
+      },
+    });
+
+    return NextResponse.json(products);
   } catch (error) {
-    console.error("Error fetching products:", error)
-    return NextResponse.json({ error: "Error fetching products" }, { status: 500 })
+    console.error("Error fetching products:", error);
+    return NextResponse.json(
+      { error: "Error fetching products" },
+      { status: 500 }
+    );
   }
 }

@@ -31,7 +31,8 @@ const FeaturedProduct = () => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("/api/featured-products");
+        // skip the very latest, then take the next 6
+        const response = await fetch("/api/featured-products?skip=1&take=6");
         if (!response.ok) throw new Error("Failed to fetch products");
         const data: Product[] = await response.json();
         setProducts(data);
@@ -145,7 +146,6 @@ const FeaturedProduct = () => {
                     }`}
                   >
                     <div className="relative group">
-                      {/* link directly, no <a> child */}
                       <Link
                         href={`/viinit-luettelo/${product.slug}`}
                         className="flex justify-center"
