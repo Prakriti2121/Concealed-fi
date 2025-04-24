@@ -122,7 +122,7 @@ export default function BannerSection() {
   const currentProduct = featuredProducts[currentIndex];
 
   return (
-    <div className="relative w-full h-[30vh] overflow-hidden">
+    <div className="relative w-full h-[40vh] sm:h-[35vh] md:h-[30vh] overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence initial={false}>
@@ -163,10 +163,10 @@ export default function BannerSection() {
               transition={{ duration: 0.5 }}
               className="w-full"
             >
-              <div className="bg-black/40 backdrop-blur-sm p-4 rounded-lg shadow-lg flex flex-row items-center justify-between">
+              <div className="bg-black/40 backdrop-blur-sm p-3 sm:p-4 rounded-lg shadow-lg flex flex-row items-center justify-between">
                 {/* Product Image */}
                 <div className="w-1/3 flex justify-center items-center">
-                  <div className="relative h-[120px] md:h-[180px]">
+                  <div className="relative h-[80px] sm:h-[120px] md:h-[180px]">
                     <Image
                       src={currentProduct.largeImage ?? "/placeholder.svg"}
                       alt={currentProduct.title ?? ""}
@@ -182,20 +182,20 @@ export default function BannerSection() {
                   </div>
                 </div>
                 {/* Product Details */}
-                <div className="w-2/3 pl-4">
-                  <h2 className="text-xl md:text-2xl font-bold mb-2 text-white">
+                <div className="w-2/3 pl-2 sm:pl-4">
+                  <h2 className="text-sm sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 text-white line-clamp-1 sm:line-clamp-2">
                     {currentProduct.title}
                   </h2>
-                  <p className="text-sm mb-3 text-white/90 line-clamp-2">
+                  <p className="text-xs sm:text-sm mb-2 sm:mb-3 text-white/90 line-clamp-1 sm:line-clamp-2 hidden xs:block">
                     {currentProduct.description}
                   </p>
-                  <div className="flex flex-row items-center gap-4">
-                    <p className="text-xl font-bold text-white">
+                  <div className="flex flex-row items-center gap-2 sm:gap-4">
+                    <p className="text-sm sm:text-xl font-bold text-white">
                       €{currentProduct.price}
                     </p>
                     <Link
                       href={currentProduct.link ?? "#"}
-                      className="inline-block bg-white text-black px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors duration-300 font-medium"
+                      className="inline-block bg-white text-black px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-base rounded-lg hover:bg-opacity-90 transition-colors duration-300 font-medium"
                     >
                       Osta nyt
                     </Link>
@@ -208,17 +208,17 @@ export default function BannerSection() {
           {/* Slider Controls */}
           <button
             onClick={handlePrevious}
-            className="absolute -left-4 md:-left-6 top-1/2 transform -translate-y-1/2 p-2 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors duration-300"
+            className="absolute -left-2 md:-left-6 top-1/2 transform -translate-y-1/2 p-1 sm:p-2 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors duration-300"
             aria-label="Previous slide"
           >
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
           <button
             onClick={handleNext}
-            className="absolute -right-4 md:-right-6 top-1/2 transform -translate-y-1/2 p-2 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors duration-300"
+            className="absolute -right-2 md:-right-6 top-1/2 transform -translate-y-1/2 p-1 sm:p-2 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors duration-300"
             aria-label="Next slide"
           >
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
       </div>
@@ -234,15 +234,15 @@ export default function BannerSection() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-md">
+            <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-2 sm:mb-4 md:mb-6 leading-tight drop-shadow-md">
               {currentBanner.title}
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed drop-shadow-sm">
+            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-white/90 mb-4 sm:mb-6 md:mb-8 leading-relaxed drop-shadow-sm hidden xs:block">
               {currentBanner.description}
             </p>
             <Link
               href={currentBanner.link ?? "#"}
-              className="inline-block bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-6 py-3 rounded-lg transition-all duration-300 border border-white/30"
+              className="inline-block bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-3 sm:px-4 md:px-6 py-1 sm:py-2 md:py-3 text-xs sm:text-sm md:text-base rounded-lg transition-all duration-300 border border-white/30"
             >
               Learn More
             </Link>
@@ -251,14 +251,14 @@ export default function BannerSection() {
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-2 left-0 right-0 z-20 flex justify-center space-x-3">
+      <div className="absolute bottom-1 sm:bottom-2 left-0 right-0 z-20 flex justify-center space-x-2 sm:space-x-3">
         {bannerItems.map((_, index) => (
           <button
             key={index}
-            className={`h-2 rounded-full transition-all duration-300 ${
+            className={`h-1 sm:h-2 rounded-full transition-all duration-300 ${
               index === currentIndex
-                ? "bg-white w-8"
-                : "bg-white/40 w-2 hover:bg-white/60"
+                ? "bg-white w-4 sm:w-8"
+                : "bg-white/40 w-1 sm:w-2 hover:bg-white/60"
             }`}
             onClick={() => {
               setCurrentIndex(index);

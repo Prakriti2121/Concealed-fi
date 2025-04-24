@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 interface Product {
   id: number;
@@ -49,13 +49,13 @@ const Jumbotron = () => {
   };
 
   return (
-    <div className="container mx-auto flex items-center min-h-screen px-4 sm:px-6 py-12 sm:py-16 md:py-0 overflow-hidden">
+    <div className="container mx-auto flex items-center min-h-[60vh] md:min-h-screen px-4 sm:px-6 py-12 sm:py-16 md:py-0 overflow-hidden">
       {isLoading ? (
         <div className="w-full flex flex-col items-center justify-center">
           <p className="text-xl md:text-2xl font-medium">Loading...</p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 items-center gap-4 sm:gap-6 lg:gap-8 w-full">
+        <div className="grid md:grid-cols-2 items-center gap-8 sm:gap-6 lg:gap-8 w-full">
           <div className="z-10 order-2 md:order-1 space-y-4 sm:space-y-6">
             {error ? (
               <p className="text-xl text-red-500">Error: {error}</p>
@@ -66,7 +66,7 @@ const Jumbotron = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, amount: 0.5 }}
                   transition={{ duration: 0.5 }}
-                  className="text-3xl sm:text-4xl lg:text-6xl font-black"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-black"
                 >
                   {latestProduct.title}
                 </motion.div>
@@ -75,13 +75,13 @@ const Jumbotron = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, amount: 0.5 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="my-4 sm:my-6 md:my-8 text-sm sm:text-base"
+                  className="my-3 sm:my-4 md:my-6 lg:my-8 text-xs sm:text-sm md:text-base"
                 >
                   {latestProduct.taste}
                 </motion.p>
                 <Button
                   onClick={handleReadMore}
-                  className="relative overflow-hidden bg-[#09090B] text-lg sm:text-xl px-3 sm:px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black"
+                  className="relative overflow-hidden bg-[#09090B] text-base sm:text-lg md:text-xl px-3 sm:px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black"
                 >
                   <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
                     Lue lisää
@@ -97,7 +97,7 @@ const Jumbotron = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, amount: 0.5 }}
                   transition={{ duration: 0.5 }}
-                  className="text-3xl sm:text-4xl lg:text-6xl font-black"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-black"
                 >
                   Bertrand Machard de Gramont Nuits-saint-Georges Les Terrasses
                   des Vallerots 2014
@@ -107,7 +107,7 @@ const Jumbotron = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, amount: 0.5 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="my-4 sm:my-6 md:my-8 text-sm sm:text-base"
+                  className="my-3 sm:my-4 md:my-6 lg:my-8 text-xs sm:text-sm md:text-base"
                 >
                   Berried and fresh reds are light or medium-bodied wines
                   infused with the flavours and activity of fresh berries. You
@@ -117,7 +117,7 @@ const Jumbotron = () => {
                 </motion.p>
                 <Button
                   onClick={() => router.push("/viinit-luettelo/default-slug")}
-                  className="relative overflow-hidden bg-[#09090B] text-lg sm:text-xl px-3 sm:px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black"
+                  className="relative overflow-hidden bg-[#09090B] text-base sm:text-lg md:text-xl px-3 sm:px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black"
                 >
                   <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
                     Lue lisää
@@ -127,7 +127,7 @@ const Jumbotron = () => {
               </>
             )}
           </div>
-          <div className="-z-10 order-1 md:order-2 flex justify-center items-center">
+          <div className="-z-10 order-1 md:order-2 flex justify-center items-center mt-6 md:mt-0">
             <div className="rotate-[30deg] transform-gpu">
               {!isLoading &&
                 (latestProduct ? (
@@ -136,7 +136,7 @@ const Jumbotron = () => {
                     width={250}
                     height={250}
                     alt={latestProduct.title}
-                    className="animate-floating cursor-pointer w-28 h-auto sm:w-40 md:w-44 lg:w-56 xl:w-64"
+                    className="animate-floating cursor-pointer w-24 sm:w-28 md:w-44 lg:w-56 xl:w-64 h-auto"
                   />
                 ) : (
                   <Image
@@ -144,7 +144,7 @@ const Jumbotron = () => {
                     width={500}
                     height={500}
                     alt="Header Wine"
-                    className="animate-floating cursor-pointer w-28 h-auto sm:w-40 md:w-44 lg:w-56 xl:w-64"
+                    className="animate-floating cursor-pointer w-24 sm:w-28 md:w-44 lg:w-56 xl:w-64 h-auto"
                   />
                 ))}
             </div>

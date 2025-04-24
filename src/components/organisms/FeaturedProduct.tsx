@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Autoplay, Navigation } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 // swiper styles
@@ -48,8 +48,8 @@ const FeaturedProduct = () => {
 
   if (isLoading) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <div className="text-5xl font-black mb-8">
+      <div className="max-w-6xl mx-auto px-4 py-12 sm:py-20 text-center">
+        <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 sm:mb-8">
           Kunnianhimoinen viinin maahantuoja
         </div>
         <div className="text-xl">Loading wines...</div>
@@ -59,8 +59,8 @@ const FeaturedProduct = () => {
 
   if (error) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <div className="text-5xl font-black mb-8">
+      <div className="max-w-6xl mx-auto px-4 py-12 sm:py-20 text-center">
+        <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 sm:mb-8">
           Kunnianhimoinen viinin maahantuoja
         </div>
         <div className="text-xl text-red-500">{error}</div>
@@ -70,8 +70,8 @@ const FeaturedProduct = () => {
 
   if (products.length === 0) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-20 text-center">
-        <div className="text-5xl font-black mb-8">
+      <div className="max-w-6xl mx-auto px-4 py-12 sm:py-20 text-center">
+        <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 sm:mb-8">
           Kunnianhimoinen viinin maahantuoja
         </div>
         <div className="text-xl">
@@ -83,9 +83,9 @@ const FeaturedProduct = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4">
-      <div className="md:mt-40">
+      <div className="mt-20 sm:mt-28 md:mt-40">
         <motion.div
-          className="text-5xl text-center font-black"
+          className="text-3xl sm:text-4xl md:text-5xl text-center font-black"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.5 }}
@@ -95,7 +95,7 @@ const FeaturedProduct = () => {
         </motion.div>
         <div className="flex justify-center text-center">
           <motion.div
-            className="text-2xl border-b border-black inline-block mt-6"
+            className="text-lg sm:text-xl md:text-2xl border-b border-black inline-block mt-4 sm:mt-6"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.5 }}
@@ -107,7 +107,7 @@ const FeaturedProduct = () => {
       </div>
 
       <div
-        className="relative py-12"
+        className="relative py-8 sm:py-12"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -115,7 +115,18 @@ const FeaturedProduct = () => {
           effect="coverflow"
           grabCursor
           centeredSlides
-          slidesPerView={3}
+          slidesPerView={1.5}
+          spaceBetween={10}
+          breakpoints={{
+            480: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          }}
           loop={products.length > 3}
           autoplay={{
             delay: 3000,
@@ -158,7 +169,7 @@ const FeaturedProduct = () => {
                           alt={product.title}
                           width={300}
                           height={400}
-                          className={`object-contain h-96 transition-transform duration-500 ${
+                          className={`object-contain h-60 sm:h-72 md:h-96 transition-transform duration-500 ${
                             isActive ? "group-hover:scale-105" : ""
                           }`}
                         />
@@ -172,8 +183,12 @@ const FeaturedProduct = () => {
                         : "-translate-y-4 opacity-0"
                     }`}
                   >
-                    <h3 className="text-2xl font-light">{product.title}</h3>
-                    <p className="text-lg mt-2">€{product.price.toFixed(2)}</p>
+                    <h3 className="text-lg sm:text-xl md:text-2xl font-light line-clamp-2">
+                      {product.title}
+                    </h3>
+                    <p className="text-base sm:text-lg mt-2">
+                      €{product.price.toFixed(2)}
+                    </p>
                   </div>
                 </div>
               )}
@@ -187,21 +202,21 @@ const FeaturedProduct = () => {
             isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
           }`}
         >
-          <ChevronLeft className="w-12 h-12" />
+          <ChevronLeft className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12" />
         </button>
         <button
           className={`swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 transition-all duration-300 ${
             isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
           }`}
         >
-          <ChevronRight className="w-12 h-12" />
+          <ChevronRight className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12" />
         </button>
       </div>
 
       <div className="flex justify-center mt-6">
         <Link
           href="/viinit-luettelo"
-          className="text-xl text-center inline-block bg-black text-white px-6 py-2 rounded-3xl hover:bg-white hover:text-black hover:border border-black hover:scale-90 transition-all duration-300 ease-in-out"
+          className="text-base sm:text-lg md:text-xl text-center inline-block bg-black text-white px-4 sm:px-6 py-2 rounded-3xl hover:bg-white hover:text-black hover:border border-black hover:scale-90 transition-all duration-300 ease-in-out"
         >
           Näytä kaikki viinit
         </Link>
@@ -222,6 +237,13 @@ const FeaturedProduct = () => {
         }
         .swiper-slide-active {
           z-index: 1;
+        }
+
+        @media (max-width: 640px) {
+          .swiper-button-next:after,
+          .swiper-button-prev:after {
+            display: none;
+          }
         }
       `}</style>
     </div>

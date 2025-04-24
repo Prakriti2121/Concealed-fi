@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     const page = await prisma.page.findUnique({
-      where: { slug: "viinit-artikkelit" },
+      where: { id: 8 },
     });
 
     if (!page) {
