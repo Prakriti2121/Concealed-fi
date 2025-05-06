@@ -20,9 +20,10 @@ export async function POST(req: NextRequest) {
   try {
     const { title, link, image, description } = await req.json();
 
-    if (!title || !link) {
+    // Validation that requires at least one field
+    if (!title && !link && !image && !description) {
       return NextResponse.json(
-        { error: "Banner title and link are required" },
+        { error: "At least one banner field is required" },
         { status: 400 }
       );
     }

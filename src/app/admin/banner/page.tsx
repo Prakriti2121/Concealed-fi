@@ -121,7 +121,13 @@ export default function BannerPage() {
   };
 
   const handleAddBanner = async () => {
-    if (newBanner.title.trim() !== "" && newBanner.link.trim() !== "") {
+    //validation that requires at least one field
+    if (
+      newBanner.title.trim() !== "" ||
+      newBanner.link.trim() !== "" ||
+      newBanner.description.trim() !== "" ||
+      previewImage !== null
+    ) {
       try {
         let imageUrl = "";
 

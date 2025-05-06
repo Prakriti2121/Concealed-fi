@@ -125,11 +125,23 @@ export default function EditBannerPage() {
       }
 
       const updatedBannerData = {
-        title: banner?.title,
-        link: banner?.link,
-        description: banner?.description,
-        image: imageUrl || previewImage || "",
+        title: banner?.title || null,
+        link: banner?.link || null,
+        description: banner?.description || null,
+        image: imageUrl || previewImage || null,
       };
+
+      // Add validation that requires at least one field
+      if (
+        !updatedBannerData.title &&
+        !updatedBannerData.link &&
+        !updatedBannerData.description &&
+        !updatedBannerData.image
+      ) {
+        setError("At least one banner field is required");
+        setIsSaving(false);
+        return;
+      }
 
       const response = await fetch(`/api/banners/${id}`, {
         method: "PUT",

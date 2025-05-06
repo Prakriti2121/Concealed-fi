@@ -146,8 +146,8 @@ model TeamMember {
 
 model Banner {
   id          Int     @id @default(autoincrement())
-  title       String
-  link        String
+  title       String?
+  link        String?
   image       String?
   description String?
 }
