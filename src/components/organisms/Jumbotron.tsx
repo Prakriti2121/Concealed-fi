@@ -49,13 +49,13 @@ const Jumbotron = () => {
   };
 
   return (
-    <div className="container mx-auto flex items-center min-h-[60vh] md:min-h-screen px-4 sm:px-6 py-12 sm:py-16 md:py-0 overflow-hidden">
+    <div className="container mx-auto flex items-center px-4 sm:px-6 py-6 sm:py-8 overflow-hidden">
       {isLoading ? (
-        <div className="w-full flex flex-col items-center justify-center">
+        <div className="w-full flex flex-col items-center justify-center py-8">
           <p className="text-xl md:text-2xl font-medium">Loading...</p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 items-center gap-8 sm:gap-6 lg:gap-8 w-full">
+        <div className="grid md:grid-cols-2 items-center gap-6 md:gap-8 w-full">
           <div className="z-10 order-2 md:order-1 space-y-4 sm:space-y-6">
             {error ? (
               <p className="text-xl text-red-500">Error: {error}</p>

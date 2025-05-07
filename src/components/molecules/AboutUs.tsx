@@ -43,7 +43,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ data }) => {
         {/* Image section */}
         <motion.div
           variants={fadeInUp}
-          className={`${isDesktop ? "order-1" : "order-2"}`}
+          className={`${isDesktop ? "order-1" : "order-1"}`}
         >
           <div className="relative overflow-hidden rounded-[40px] shadow-lg">
             <Image
@@ -60,7 +60,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ data }) => {
         {/* Text section */}
         <motion.div
           variants={fadeInUp}
-          className={`${isDesktop ? "order-2" : "order-1"} space-y-6`}
+          className={`${isDesktop ? "order-2" : "order-2"} space-y-6`}
         >
           <h2 className="text-4xl md:text-5xl font-black relative">
             {data.title}

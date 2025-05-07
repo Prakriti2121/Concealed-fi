@@ -40,7 +40,10 @@ const OurWines: React.FC<OurWinesProps> = ({ data }) => {
         } gap-12`}
       >
         {/* Text section */}
-        <motion.div variants={fadeInUp} className="space-y-6">
+        <motion.div
+          variants={fadeInUp}
+          className={`${isDesktop ? "order-1" : "order-2"} space-y-6`}
+        >
           <h2 className="text-4xl md:text-5xl font-black relative">
             {data.title || "Our Wines"}
             <span className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary/5 text-7xl md:text-8xl font-black">
@@ -67,7 +70,10 @@ const OurWines: React.FC<OurWinesProps> = ({ data }) => {
         </motion.div>
 
         {/* Image section */}
-        <motion.div variants={fadeInUp}>
+        <motion.div
+          variants={fadeInUp}
+          className={`${isDesktop ? "order-2" : "order-1"}`}
+        >
           <div className="relative overflow-hidden rounded-[40px] shadow-lg">
             <Image
               src={data.featuredImage || "/images/barrels.jpg"}
