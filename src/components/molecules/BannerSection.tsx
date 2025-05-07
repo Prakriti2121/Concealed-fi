@@ -1,17 +1,13 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// Define interfaces for the Banner and Featured Product
+// Simplified interfaces
 interface BannerItem {
   id: number;
-  title: string;
-  description: string;
-  link: string;
   image: string;
 }
 
@@ -24,33 +20,29 @@ interface FeaturedProduct {
   link: string | undefined;
 }
 
-export default function BannerSection() {
-  const [scrollY, setScrollY] = useState(0);
+export default function SimplifiedBannerSection() {
   const [bannerItems, setBannerItems] = useState<BannerItem[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<FeaturedProduct[]>(
     []
   );
   const [isLoading, setIsLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Track scroll for parallax effect
-  const handleScroll = useCallback(() => {
-    setScrollY(window.scrollY);
-  }, []);
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+  const [currentProductIndex, setCurrentProductIndex] = useState(0);
+  const [selectedBanner, setSelectedBanner] = useState<BannerItem | null>(null);
 
   // Fetch banners and featured products once on mount
   useEffect(() => {
     async function fetchData() {
       try {
-        const bannerResponse = await fetch("/api/banners");
+        const timestamp = new Date().getTime();
+        const bannerResponse = await fetch(`/api/banners?t=${timestamp}`);
         if (bannerResponse.ok) {
           const banners: BannerItem[] = await bannerResponse.json();
           setBannerItems(banners);
+
+          if (banners.length > 0) {
+            const randomIndex = Math.floor(Math.random() * banners.length);
+            setSelectedBanner(banners[randomIndex]);
+          }
         } else {
           console.error("Failed to fetch banners");
         }
@@ -71,200 +63,159 @@ export default function BannerSection() {
     fetchData();
   }, []);
 
-  // Auto‑slide interval (only when banners exist)
-  const startAutoSlide = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    if (bannerItems.length === 0) return;
-
-    intervalRef.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % bannerItems.length);
-    }, 5000);
-  }, [bannerItems.length]);
-
+  // Auto-slide setup for featured products
   useEffect(() => {
-    startAutoSlide();
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [startAutoSlide]);
+    if (featuredProducts.length === 0) return;
 
-  // Manual controls
-  const handlePrevious = useCallback(() => {
-    setCurrentIndex(
-      (prev) => (prev - 1 + bannerItems.length) % bannerItems.length
-    );
-    startAutoSlide();
-  }, [bannerItems.length, startAutoSlide]);
+    const interval = setInterval(() => {
+      setCurrentProductIndex((prev) => (prev + 1) % featuredProducts.length);
+    }, 8000);
 
-  const handleNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % bannerItems.length);
-    startAutoSlide();
-  }, [bannerItems.length, startAutoSlide]);
+    return () => clearInterval(interval);
+  }, [featuredProducts.length]);
 
-  // Loading & empty states
   if (isLoading) {
     return (
-      <div className="w-full h-52 flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
-  if (bannerItems.length === 0 || featuredProducts.length === 0) {
-    return (
-      <div className="w-full h-52 flex items-center justify-center">
-        No banners or featured products available
+      <div className="relative w-full h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[50vh] xl:h-[55vh] overflow-hidden bg-gray-100">
+        {/* Simple light gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-200 to-gray-100" />
+
+        {/* Basic loading indicator */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 border-3 sm:border-4 border-gray-300 border-t-gray-500 rounded-full animate-spin"></div>
+          <p className="mt-3 sm:mt-4 text-gray-600 font-medium text-xs sm:text-sm">
+            Loading banner...
+          </p>
+        </div>
       </div>
     );
   }
 
-  // Current items
-  const currentBanner = bannerItems[currentIndex];
-  const currentProduct = featuredProducts[currentIndex];
+  if (!selectedBanner || featuredProducts.length === 0) {
+    return (
+      <div className="w-full h-[30vh] sm:h-[35vh] md:h-[40vh] flex items-center justify-center bg-gray-50">
+        <p className="text-sm sm:text-base text-gray-500 font-medium px-4 text-center">
+          No banner or featured products available
+        </p>
+      </div>
+    );
+  }
+
+  // Current product
+  const currentProduct = featuredProducts[currentProductIndex];
 
   return (
-    <div className="relative w-full h-[40vh] sm:h-[35vh] md:h-[30vh] overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <AnimatePresence initial={false}>
-          <motion.div
-            key={currentBanner.id}
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div
-              className="absolute inset-0 transition-transform duration-300 ease-out"
-              style={{ transform: `translateY(${scrollY * 0.2}px)` }}
-            >
-              <Image
-                src={currentBanner.image ?? "/placeholder.svg"}
-                alt={currentBanner.title ?? ""}
-                fill
-                className="object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+    <div className="relative w-full h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[50vh] xl:h-[55vh] overflow-hidden">
+      {/* Banner Background with Darker Overlay */}
+      <motion.div
+        className="absolute inset-0"
+        initial={{ scale: 1.03 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 8, ease: "easeOut" }}
+      >
+        <Image
+          src={selectedBanner.image ?? "/placeholder.svg"}
+          alt="Banner background"
+          fill
+          className="object-cover object-center brightness-[0.85]"
+          priority
+          quality={90}
+          sizes="100vw"
+        />
+        {/* Darker Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/75 to-black/85" />
+      </motion.div>
 
-      {/* Featured Products Slider */}
-      <div className="absolute z-20 top-1/2 left-0 right-0 transform -translate-y-1/2 flex items-center justify-center">
-        <div className="relative w-full max-w-3xl px-4 flex items-center justify-center">
-          <AnimatePresence initial={false}>
+      {/* Content Container */}
+      <div className="absolute inset-0 z-10">
+        <div className="container h-full mx-auto px-3 sm:px-4 md:px-6 flex items-center">
+          <AnimatePresence mode="wait">
             <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
+              key={currentProduct.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.5 }}
-              className="w-full"
+              className="w-full flex flex-col md:flex-row items-center justify-center md:gap-4 lg:gap-6"
             >
-              <div className="bg-black/40 backdrop-blur-sm p-3 sm:p-4 rounded-lg shadow-lg flex flex-row items-center justify-between">
-                {/* Product Image */}
-                <div className="w-1/3 flex justify-center items-center">
-                  <div className="relative h-[80px] sm:h-[120px] md:h-[180px]">
+              {/* Product Image Section */}
+              <div className="w-full md:w-2/5 flex justify-center order-1 md:order-1 mb-4 sm:mb-5 md:mb-0 mt-4 sm:mt-5 md:mt-0">
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.3 }}
+                  className="relative"
+                >
+                  <div className="relative h-[140px] w-[120px] xs:h-[160px] xs:w-[140px] sm:h-[180px] sm:w-[160px] md:h-[260px] md:w-[220px] lg:h-[300px] lg:w-[240px] xl:h-[340px] xl:w-[260px]">
                     <Image
                       src={currentProduct.largeImage ?? "/placeholder.svg"}
-                      alt={currentProduct.title ?? ""}
-                      width={80}
-                      height={180}
-                      style={{
-                        objectFit: "contain",
-                        height: "100%",
-                        width: "auto",
-                      }}
-                      className="max-h-full"
+                      alt={currentProduct.title ?? "Featured product"}
+                      fill
+                      style={{ objectFit: "contain" }}
+                      className="drop-shadow-2xl"
+                      priority
+                      sizes="(max-width: 768px) 140px, (max-width: 1024px) 220px, 260px"
                     />
+                    {/* Enhanced glow effect behind product */}
+                    <div className="absolute inset-0 -z-10 bg-white/15 rounded-full blur-2xl sm:blur-3xl scale-90 opacity-70" />
                   </div>
-                </div>
-                {/* Product Details */}
-                <div className="w-2/3 pl-2 sm:pl-4">
-                  <h2 className="text-sm sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 text-white line-clamp-1 sm:line-clamp-2">
-                    {currentProduct.title}
-                  </h2>
-                  <p className="text-xs sm:text-sm mb-2 sm:mb-3 text-white/90 line-clamp-1 sm:line-clamp-2 hidden xs:block">
-                    {currentProduct.description}
+                </motion.div>
+              </div>
+
+              {/* Product Information Section */}
+              <div className="w-full md:w-1/2 space-y-2 xs:space-y-2.5 sm:space-y-3 md:space-y-5 text-center md:text-left order-2 md:order-2">
+                <motion.h2
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="text-lg xs:text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight line-clamp-2"
+                >
+                  {currentProduct.title}
+                </motion.h2>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="text-xs xs:text-sm md:text-base lg:text-lg text-white/90 line-clamp-2 sm:line-clamp-3 max-w-xl px-2 sm:px-0"
+                >
+                  {currentProduct.description}
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                  className="flex flex-row items-center gap-3 xs:gap-4 sm:gap-5 md:gap-6 justify-center md:justify-start pt-1 sm:pt-2"
+                >
+                  <p className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-white">
+                    €{currentProduct.price}
                   </p>
-                  <div className="flex flex-row items-center gap-2 sm:gap-4">
-                    <p className="text-sm sm:text-xl font-bold text-white">
-                      €{currentProduct.price}
-                    </p>
-                    <Link
-                      href={currentProduct.link ?? "#"}
-                      className="inline-block bg-white text-black px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-base rounded-lg hover:bg-opacity-90 transition-colors duration-300 font-medium"
-                    >
-                      Osta nyt
-                    </Link>
-                  </div>
-                </div>
+                  <Link
+                    href={currentProduct.link ?? "#"}
+                    className="bg-white text-black px-4 xs:px-5 sm:px-6 py-1.5 xs:py-2 sm:py-2.5 text-xs xs:text-sm sm:text-base rounded-md hover:bg-white/90 transition-all duration-300 font-medium shadow-lg"
+                  >
+                    Osta nyt
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           </AnimatePresence>
-
-          {/* Slider Controls */}
-          <button
-            onClick={handlePrevious}
-            className="absolute -left-2 md:-left-6 top-1/2 transform -translate-y-1/2 p-1 sm:p-2 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors duration-300"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-          </button>
-          <button
-            onClick={handleNext}
-            className="absolute -right-2 md:-right-6 top-1/2 transform -translate-y-1/2 p-1 sm:p-2 bg-black/60 text-white rounded-full hover:bg-black/80 transition-colors duration-300"
-            aria-label="Next slide"
-          >
-            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
-          </button>
         </div>
       </div>
 
-      {/* Text Overlay */}
-      <div className="relative z-10 h-full container mx-auto px-4 flex flex-col items-center justify-center">
-        <AnimatePresence initial={false} mode="wait">
-          <motion.div
-            key={currentBanner.id}
-            className="text-center text-white max-w-3xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-2 sm:mb-4 md:mb-6 leading-tight drop-shadow-md">
-              {currentBanner.title}
-            </h1>
-            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-white/90 mb-4 sm:mb-6 md:mb-8 leading-relaxed drop-shadow-sm hidden xs:block">
-              {currentBanner.description}
-            </p>
-            <Link
-              href={currentBanner.link ?? "#"}
-              className="inline-block bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white px-3 sm:px-4 md:px-6 py-1 sm:py-2 md:py-3 text-xs sm:text-sm md:text-base rounded-lg transition-all duration-300 border border-white/30"
-            >
-              Learn More
-            </Link>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
       {/* Slide Indicators */}
-      <div className="absolute bottom-1 sm:bottom-2 left-0 right-0 z-20 flex justify-center space-x-2 sm:space-x-3">
-        {bannerItems.map((_, index) => (
+      <div className="absolute bottom-3 sm:bottom-4 md:bottom-5 left-0 right-0 z-20 flex justify-center space-x-1.5 sm:space-x-2">
+        {featuredProducts.map((_, index) => (
           <button
             key={index}
-            className={`h-1 sm:h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex
-                ? "bg-white w-4 sm:w-8"
-                : "bg-white/40 w-1 sm:w-2 hover:bg-white/60"
+            className={`transition-all duration-300 rounded-full ${
+              index === currentProductIndex
+                ? "bg-white w-4 sm:w-5 md:w-6 h-1.5 sm:h-2"
+                : "bg-white/40 w-1.5 sm:w-2 h-1.5 sm:h-2 hover:bg-white/60"
             }`}
-            onClick={() => {
-              setCurrentIndex(index);
-              startAutoSlide();
-            }}
-            aria-label={`Go to slide ${index + 1}`}
+            onClick={() => setCurrentProductIndex(index)}
+            aria-label={`Go to product ${index + 1}`}
           />
         ))}
       </div>
