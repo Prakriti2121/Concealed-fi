@@ -52,7 +52,65 @@ const FeaturedProduct = () => {
         <div className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 sm:mb-8">
           Kunnianhimoinen viinin maahantuoja
         </div>
-        <div className="text-xl">Loading wines...</div>
+
+        <div className="flex justify-center mb-8">
+          <span className="text-lg sm:text-xl md:text-2xl border-b border-black inline-block mt-2 sm:mt-4">
+            Laatu on tärkeämpää kuin määrä
+          </span>
+        </div>
+
+        {/* Improved Skeleton Swiper that better matches the final layout */}
+        <div className="relative py-8 sm:py-12">
+          <div className="flex justify-center items-center">
+            {/* Left bottle (faded) */}
+            <div className="hidden sm:block relative mx-4 transform scale-75 opacity-50">
+              <div className="bg-gray-200 h-60 sm:h-72 md:h-96 w-24 sm:w-32 md:w-40 rounded-md animate-pulse mx-auto"></div>
+            </div>
+
+            {/* Center bottle (active) */}
+            <div className="relative mx-4 z-10">
+              <div className="bg-gray-200 h-60 sm:h-72 md:h-96 w-36 sm:w-40 md:w-48 rounded-md animate-pulse mx-auto"></div>
+              <div className="mt-4 text-center w-full">
+                <div className="bg-gray-200 h-6 w-full rounded mb-2 animate-pulse"></div>
+                <div className="bg-gray-200 h-5 w-1/2 mx-auto rounded animate-pulse"></div>
+              </div>
+            </div>
+
+            {/* Right bottle (faded) */}
+            <div className="hidden sm:block relative mx-4 transform scale-75 opacity-50">
+              <div className="bg-gray-200 h-60 sm:h-72 md:h-96 w-24 sm:w-32 md:w-40 rounded-md animate-pulse mx-auto"></div>
+            </div>
+          </div>
+
+          {/* Navigation buttons */}
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 opacity-0">
+            <ChevronLeft className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12" />
+          </div>
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-0">
+            <ChevronRight className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12" />
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <div className="inline-block bg-gray-200 text-transparent px-6 py-2 rounded-3xl animate-pulse">
+            Näytä kaikki viinit
+          </div>
+        </div>
+
+        <style jsx>{`
+          @keyframes pulse {
+            0%,
+            100% {
+              opacity: 0.6;
+            }
+            50% {
+              opacity: 0.8;
+            }
+          }
+          .animate-pulse {
+            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+          }
+        `}</style>
       </div>
     );
   }

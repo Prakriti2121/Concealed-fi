@@ -51,8 +51,33 @@ const Jumbotron = () => {
   return (
     <div className="container mx-auto flex items-center px-4 sm:px-6 py-6 sm:py-8 overflow-hidden">
       {isLoading ? (
-        <div className="w-full flex flex-col items-center justify-center py-8">
-          <p className="text-xl md:text-2xl font-medium">Loading...</p>
+        <div className="w-full grid md:grid-cols-2 items-center gap-6 md:gap-8">
+          {/* Left side skeleton - Title, Description, Button */}
+          <div className="z-10 order-2 md:order-1 space-y-4 sm:space-y-6">
+            {/* Title skeleton */}
+            <div className="space-y-2">
+              <div className="h-8 sm:h-10 md:h-12 lg:h-14 bg-gray-200 rounded-md w-3/4 animate-pulse"></div>
+              <div className="h-8 sm:h-10 md:h-12 lg:h-14 bg-gray-200 rounded-md w-1/2 animate-pulse"></div>
+            </div>
+
+            {/* Description skeleton */}
+            <div className="space-y-2 my-3 sm:my-4 md:my-6 lg:my-8">
+              <div className="h-3 sm:h-4 bg-gray-200 rounded-md w-full animate-pulse"></div>
+              <div className="h-3 sm:h-4 bg-gray-200 rounded-md w-11/12 animate-pulse"></div>
+              <div className="h-3 sm:h-4 bg-gray-200 rounded-md w-full animate-pulse"></div>
+              <div className="h-3 sm:h-4 bg-gray-200 rounded-md w-3/4 animate-pulse"></div>
+            </div>
+
+            {/* Button skeleton */}
+            <div className="h-10 sm:h-12 md:h-14 bg-gray-200 rounded-md w-32 sm:w-36 md:w-40 animate-pulse"></div>
+          </div>
+
+          {/* Right side skeleton - Wine bottle image */}
+          <div className="-z-10 order-1 md:order-2 flex justify-center items-center mt-6 md:mt-0">
+            <div className="transform-gpu">
+              <div className="animate-pulse bg-gray-200 w-24 sm:w-28 md:w-44 lg:w-56 xl:w-64 h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px]"></div>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 items-center gap-6 md:gap-8 w-full">
@@ -129,24 +154,23 @@ const Jumbotron = () => {
           </div>
           <div className="-z-10 order-1 md:order-2 flex justify-center items-center mt-6 md:mt-0">
             <div className="rotate-[30deg] transform-gpu">
-              {!isLoading &&
-                (latestProduct ? (
-                  <Image
-                    src={latestProduct.largeImage || "/placeholder.svg"}
-                    width={250}
-                    height={250}
-                    alt={latestProduct.title}
-                    className="animate-floating cursor-pointer w-24 sm:w-28 md:w-44 lg:w-56 xl:w-64 h-auto"
-                  />
-                ) : (
-                  <Image
-                    src="/images/wine-header.webp"
-                    width={500}
-                    height={500}
-                    alt="Header Wine"
-                    className="animate-floating cursor-pointer w-24 sm:w-28 md:w-44 lg:w-56 xl:w-64 h-auto"
-                  />
-                ))}
+              {latestProduct ? (
+                <Image
+                  src={latestProduct.largeImage || "/placeholder.svg"}
+                  width={250}
+                  height={250}
+                  alt={latestProduct.title}
+                  className="animate-floating cursor-pointer w-24 sm:w-28 md:w-44 lg:w-56 xl:w-64 h-auto"
+                />
+              ) : (
+                <Image
+                  src="/images/wine-header.webp"
+                  width={500}
+                  height={500}
+                  alt="Header Wine"
+                  className="animate-floating cursor-pointer w-24 sm:w-28 md:w-44 lg:w-56 xl:w-64 h-auto"
+                />
+              )}
             </div>
           </div>
         </div>
