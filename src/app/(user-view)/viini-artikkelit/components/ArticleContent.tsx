@@ -71,7 +71,56 @@ export function ArticleContent({
   };
 
   if (loading && !disableSkeleton) {
-    return <div>Loading....</div>;
+    return (
+      <div className="space-y-8">
+        {showBreadcrumb && <BreadCrumb title1="Viini-artikkelit" />}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {[...Array(limit || postsPerPage)].map((_, index) => (
+            <Card
+              key={index}
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700"
+            >
+              {/* Image skeleton */}
+              <div className="w-full h-48 bg-gray-200 dark:bg-gray-800 animate-pulse" />
+
+              <CardHeader>
+                {/* Title skeleton */}
+                <div className="h-7 w-3/4 bg-gray-200 dark:bg-gray-800 rounded animate-pulse mb-2" />
+
+                {/* Date skeleton */}
+                <div className="flex items-center">
+                  <div className="w-4 h-4 mr-2 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                  <div className="h-4 w-1/3 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                </div>
+              </CardHeader>
+
+              <CardContent>
+                {/* Content skeleton */}
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                  <div className="h-4 w-full bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                  <div className="h-4 w-2/3 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                </div>
+
+                {/* Categories and button skeleton */}
+                <div className="mt-4 flex justify-between items-center">
+                  <div className="h-4 w-1/3 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                  <div className="h-4 w-1/4 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {!limit && (
+          <div className="flex justify-center space-x-4 mt-4">
+            <div className="h-8 w-20 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+            <div className="h-8 w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+            <div className="h-8 w-20 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+          </div>
+        )}
+      </div>
+    );
   }
 
   if (loading) {

@@ -52,34 +52,37 @@ export default function SidebarContent({
     fetchPosts();
   }, []);
 
+  const renderSkeletonLoader = () => {
+    // Create an array of 3 items (or use the limit if provided)
+    const skeletonCount = limit || 3;
+    return Array.from({ length: skeletonCount }).map((_, index) => (
+      <div
+        key={`skeleton-${index}`}
+        className="flex items-start justify-between gap-2 border border-border rounded-lg p-2 md:p-2"
+      >
+        <div className="w-full">
+          <div className="h-4 bg-secondary rounded animate-pulse w-4/5 mb-1"></div>
+          <div className="h-4 bg-secondary rounded animate-pulse w-3/5"></div>
+        </div>
+        <div className="h-4 w-4 bg-secondary rounded-full animate-pulse flex-shrink-0 mt-0.5"></div>
+      </div>
+    ));
+  };
+
   const renderLatestNews = () => {
     if (loading) {
       return (
-        <div className="p-4">
-          <div className="text-muted-foreground text-sm">Loading...</div>
-        </div>
+        <div className="space-y-3 md:space-y-4">{renderSkeletonLoader()}</div>
       );
     }
 
     if (error) {
-      return (
-        <div className="p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-xl font-medium">Viini Artikkelit</h3>
-          </div>
-          <div className="text-destructive text-sm">Error: {error}</div>
-        </div>
-      );
+      return <div className="text-destructive text-sm">Error: {error}</div>;
     }
 
     if (!posts || posts.length === 0) {
       return (
-        <div className="p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <h3 className="text-xl font-medium">Viini Artikkelit</h3>
-          </div>
-          <div className="text-muted-foreground text-sm">No posts found.</div>
-        </div>
+        <div className="text-muted-foreground text-sm">No posts found.</div>
       );
     }
 

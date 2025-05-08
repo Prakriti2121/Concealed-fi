@@ -119,7 +119,80 @@ export default function ArticlePageClient({ slug }: ArticlePageClientProps) {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="container mx-auto px-4 py-8">
+        {/* Skeleton Breadcrumb */}
+        <div className="flex items-center gap-2 mb-6">
+          <div className="h-4 bg-secondary rounded animate-pulse w-24"></div>
+          <div className="h-4 bg-secondary rounded animate-pulse w-4"></div>
+          <div className="h-4 bg-secondary rounded animate-pulse w-32"></div>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8 relative">
+          {/* Main Content Skeleton - width matches the actual content */}
+          <div className="w-full lg:w-3/4">
+            <article className="bg-card shadow-lg rounded-lg overflow-hidden">
+              {/* Skeleton Featured Image */}
+              <div className="w-full h-[400px] bg-secondary animate-pulse"></div>
+
+              <div className="p-6">
+                {/* Skeleton Title */}
+                <div className="h-10 bg-secondary rounded animate-pulse w-3/4 mb-4"></div>
+
+                {/* Skeleton Meta Info */}
+                <div className="flex flex-wrap items-center gap-4 text-sm mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 bg-secondary rounded animate-pulse"></div>
+                    <div className="h-4 bg-secondary rounded animate-pulse w-24"></div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 bg-secondary rounded animate-pulse"></div>
+                    <div className="h-4 bg-secondary rounded animate-pulse w-20"></div>
+                  </div>
+                </div>
+
+                {/* Skeleton Content */}
+                <div className="space-y-4">
+                  <div className="h-4 bg-secondary rounded animate-pulse w-full"></div>
+                  <div className="h-4 bg-secondary rounded animate-pulse w-full"></div>
+                  <div className="h-4 bg-secondary rounded animate-pulse w-3/4"></div>
+                  <div className="h-4 bg-secondary rounded animate-pulse w-full"></div>
+                  <div className="h-4 bg-secondary rounded animate-pulse w-5/6"></div>
+                  <div className="h-4 bg-secondary rounded animate-pulse w-full"></div>
+                  <div className="h-4 bg-secondary rounded animate-pulse w-2/3"></div>
+                </div>
+
+                {/* Skeleton Share Buttons */}
+                <div className="mt-8 flex flex-wrap justify-between items-center gap-4">
+                  <div className="flex space-x-4">
+                    <div className="h-10 w-10 bg-secondary rounded animate-pulse"></div>
+                    <div className="h-10 w-10 bg-secondary rounded animate-pulse"></div>
+                    <div className="h-10 w-10 bg-secondary rounded animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            {/* Skeleton Comments Section */}
+            <section className="mt-12">
+              <div className="h-8 bg-secondary rounded animate-pulse w-40 mb-4"></div>
+
+              {/* Skeleton Comment Form */}
+              <div className="mt-8">
+                <div className="h-6 bg-secondary rounded animate-pulse w-48 mb-4"></div>
+                <div className="h-32 bg-secondary rounded animate-pulse w-full mb-4"></div>
+                <div className="h-10 bg-secondary rounded animate-pulse w-32"></div>
+              </div>
+            </section>
+          </div>
+
+          {/* Use empty div for sidebar with correct width to maintain layout */}
+          <div className="lg:w-1/4 lg:sticky lg:top-6 lg:self-start h-fit">
+            <SidebarContent excludeSlug={slug} limit={6} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {

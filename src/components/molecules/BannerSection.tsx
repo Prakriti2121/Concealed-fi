@@ -76,9 +76,9 @@ export default function SimplifiedBannerSection() {
 
   if (isLoading) {
     return (
-      <div className="relative w-full h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[50vh] xl:h-[55vh] overflow-hidden bg-gray-800">
+      <div className="relative w-full h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[50vh] xl:h-[55vh] overflow-hidden bg-gray-400">
         {/* Skeleton dark gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 animate-pulse" />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-450 via-gray-350 to-gray-450 animate-pulse" />
 
         <div className="absolute inset-0 z-10">
           <div className="container h-full mx-auto px-3 sm:px-4 md:px-6 flex items-center">
@@ -86,9 +86,9 @@ export default function SimplifiedBannerSection() {
               {/* Skeleton Product Image */}
               <div className="w-full md:w-2/5 flex justify-center order-1 md:order-1 mb-4 sm:mb-5 md:mb-0 mt-4 sm:mt-5 md:mt-0">
                 <div className="relative">
-                  <div className="relative h-[140px] w-[120px] xs:h-[160px] xs:w-[140px] sm:h-[180px] sm:w-[160px] md:h-[260px] md:w-[220px] lg:h-[300px] lg:w-[240px] xl:h-[340px] xl:w-[260px] bg-gray-700 rounded-md animate-pulse">
+                  <div className="relative h-[140px] w-[120px] xs:h-[160px] xs:w-[140px] sm:h-[180px] sm:w-[160px] md:h-[260px] md:w-[220px] lg:h-[300px] lg:w-[240px] xl:h-[340px] xl:w-[260px] bg-gray-300 rounded-md animate-pulse">
                     {/* Pulsing glow effect */}
-                    <div className="absolute inset-0 -z-10 bg-gray-600/30 rounded-full blur-2xl sm:blur-3xl scale-90 opacity-70 animate-pulse" />
+                    <div className="absolute inset-0 -z-10 bg-gray-250/30 rounded-full blur-2xl sm:blur-3xl scale-90 opacity-70 animate-pulse" />
                   </div>
                 </div>
               </div>
@@ -96,19 +96,19 @@ export default function SimplifiedBannerSection() {
               {/* Skeleton Product Information */}
               <div className="w-full md:w-1/2 space-y-2 xs:space-y-2.5 sm:space-y-3 md:space-y-5 text-center md:text-left order-2 md:order-2">
                 {/* Title skeleton */}
-                <div className="h-6 xs:h-7 sm:h-8 md:h-10 lg:h-12 bg-gray-700 rounded-md w-3/4 mx-auto md:mx-0 animate-pulse" />
+                <div className="h-6 xs:h-7 sm:h-8 md:h-10 lg:h-12 bg-gray-300 rounded-md w-3/4 mx-auto md:mx-0 animate-pulse" />
 
                 {/* Description skeleton - multiple lines */}
                 <div className="space-y-1.5 sm:space-y-2">
-                  <div className="h-3 xs:h-4 sm:h-5 bg-gray-700 rounded-md w-full animate-pulse" />
-                  <div className="h-3 xs:h-4 sm:h-5 bg-gray-700 rounded-md w-5/6 animate-pulse" />
-                  <div className="h-3 xs:h-4 sm:h-5 bg-gray-700 rounded-md w-2/3 animate-pulse hidden sm:block" />
+                  <div className="h-3 xs:h-4 sm:h-5 bg-gray-300 rounded-md w-full animate-pulse" />
+                  <div className="h-3 xs:h-4 sm:h-5 bg-gray-300 rounded-md w-5/6 animate-pulse" />
+                  <div className="h-3 xs:h-4 sm:h-5 bg-gray-300 rounded-md w-2/3 animate-pulse hidden sm:block" />
                 </div>
 
                 {/* Price and button skeleton */}
                 <div className="flex flex-row items-center gap-3 xs:gap-4 sm:gap-5 md:gap-6 justify-center md:justify-start pt-1 sm:pt-2">
-                  <div className="h-6 xs:h-7 sm:h-8 md:h-9 lg:h-10 bg-gray-700 rounded-md w-16 xs:w-20 sm:w-24 md:w-28 animate-pulse" />
-                  <div className="h-8 xs:h-9 sm:h-10 md:h-11 bg-gray-700 rounded-md w-20 xs:w-24 sm:w-28 md:w-32 animate-pulse" />
+                  <div className="h-6 xs:h-7 sm:h-8 md:h-9 lg:h-10 bg-gray-300 rounded-md w-16 xs:w-20 sm:w-24 md:w-28 animate-pulse" />
+                  <div className="h-8 xs:h-9 sm:h-10 md:h-11 bg-gray-300 rounded-md w-20 xs:w-24 sm:w-28 md:w-32 animate-pulse" />
                 </div>
               </div>
             </div>
@@ -120,7 +120,7 @@ export default function SimplifiedBannerSection() {
           {[...Array(3)].map((_, index) => (
             <div
               key={index}
-              className="bg-gray-700 w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full animate-pulse"
+              className="bg-gray-300 w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full animate-pulse"
             />
           ))}
         </div>
@@ -131,7 +131,7 @@ export default function SimplifiedBannerSection() {
   if (!selectedBanner || featuredProducts.length === 0) {
     return (
       <div className="w-full h-[30vh] sm:h-[35vh] md:h-[40vh] flex items-center justify-center bg-gray-50">
-        <p className="text-sm sm:text-base text-gray-500 font-medium px-4 text-center">
+        <p className="text-sm sm:text-base text-gray-200 font-medium px-4 text-center">
           No banner or featured products available
         </p>
       </div>

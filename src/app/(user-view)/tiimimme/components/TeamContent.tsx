@@ -56,7 +56,52 @@ export function TeamContent() {
   }, []);
 
   if (loading) {
-    return <div>Loading..</div>;
+    return (
+      <div className="container mx-auto my-6 px-4">
+        {/* Skeleton breadcrumb */}
+        <div className="h-6 w-64 bg-secondary rounded-md animate-pulse mb-4" />
+        <div className="flex flex-col md:flex-row gap-8 relative">
+          {/* Main Content skeleton - 3/4 width */}
+          <div className="w-full md:w-3/4">
+            <div className="grid gap-6 sm:gap-8 md:gap-10">
+              {/* Generate 4 team member card skeletons */}
+              {[1, 2, 3, 4].map((index) => (
+                <Card
+                  key={index}
+                  className="overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm"
+                >
+                  <div className="flex flex-col sm:flex-row h-full">
+                    {/* Image placeholder */}
+                    <div className="relative w-full sm:w-1/3 h-64 sm:h-auto bg-secondary animate-pulse" />
+
+                    <div className="flex-1 p-4 sm:p-6 flex flex-col justify-center">
+                      <div className="p-0 pb-2 sm:pb-3 space-y-3">
+                        {/* Name skeleton */}
+                        <div className="h-7 bg-secondary rounded-md w-3/5 animate-pulse" />
+                        {/* Role skeleton */}
+                        <div className="h-5 bg-secondary rounded-md w-2/5 animate-pulse mt-1" />
+                      </div>
+                      <div className="p-0 mt-4 space-y-2">
+                        {/* Description skeleton lines */}
+                        <div className="h-4 bg-secondary rounded-md w-full animate-pulse" />
+                        <div className="h-4 bg-secondary rounded-md w-full animate-pulse" />
+                        <div className="h-4 bg-secondary rounded-md w-4/5 animate-pulse" />
+                        <div className="h-4 bg-secondary rounded-md w-5/6 animate-pulse" />
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Right sidebar */}
+          <div className="w-full md:w-1/4 md:sticky md:top-6 md:self-start">
+            <SidebarContent limit={6} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {

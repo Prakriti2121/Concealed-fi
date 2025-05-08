@@ -97,7 +97,90 @@ export function ContactContent() {
   };
 
   if (isLoading) {
-    return <div>Loading..</div>;
+    return (
+      <div className="max-w-6xl mx-auto container">
+        {/* Skeleton Breadcrumb */}
+        <div className="h-6 w-48 bg-secondary dark:bg-gray-800 rounded animate-pulse mb-6" />
+
+        <div className="flex flex-col md:flex-row gap-8 my-6">
+          {/* Main Contact Content Skeleton */}
+          <div className="flex-1">
+            <div className="grid grid-cols-1 gap-8">
+              {/* First Card Skeleton - Company Information */}
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-4 w-full">
+                      {/* Title skeleton */}
+                      <div className="flex items-center gap-2">
+                        <div className="h-7 w-48 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                      </div>
+
+                      {/* Content skeleton - Multiple lines */}
+                      <div className="space-y-2">
+                        <div className="h-4 w-full bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                        <div className="h-4 w-4/5 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                        <div className="h-4 w-3/4 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                        <div className="h-4 w-5/6 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                        <div className="h-4 w-2/3 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Share button skeleton */}
+                  <div className="mt-6 flex gap-2">
+                    <div className="h-9 w-24 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Second Card Skeleton - Contact Form */}
+              <Card>
+                <CardContent className="p-6">
+                  {/* Form title skeleton */}
+                  <div className="h-7 w-36 bg-secondary dark:bg-gray-800 rounded animate-pulse mb-4" />
+
+                  {/* Form fields skeleton */}
+                  <div className="space-y-4">
+                    {/* Name field */}
+                    <div className="space-y-2">
+                      <div className="h-5 w-16 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                      <div className="h-10 w-full bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                    </div>
+
+                    {/* Email field */}
+                    <div className="space-y-2">
+                      <div className="h-5 w-16 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                      <div className="h-10 w-full bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                    </div>
+
+                    {/* Subject field */}
+                    <div className="space-y-2">
+                      <div className="h-5 w-20 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                      <div className="h-10 w-full bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                    </div>
+
+                    {/* Message field */}
+                    <div className="space-y-2">
+                      <div className="h-5 w-24 bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                      <div className="h-24 w-full bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                    </div>
+
+                    {/* Submit button */}
+                    <div className="h-10 w-full bg-secondary dark:bg-gray-800 rounded animate-pulse" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="w-full md:w-1/4 md:sticky md:top-6 md:self-start">
+            <SidebarContent limit={6} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!pageData) {

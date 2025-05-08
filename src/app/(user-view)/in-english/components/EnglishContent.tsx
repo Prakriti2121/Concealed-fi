@@ -46,7 +46,72 @@ export default function EnglishContent() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading....</div>;
+    return (
+      <div className="container mx-auto my-6 px-4">
+        {/* Skeleton breadcrumb */}
+        <div className="h-6 w-48 bg-secondary dark:bg-gray-800 rounded-md animate-pulse mb-4" />
+        <div className="flex flex-col md:flex-row gap-8 relative">
+          {/* Main Content skeleton - 3/4 width */}
+          <div className="w-full md:w-3/4">
+            <Card>
+              <CardContent className="p-6 my-6">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-4 w-full">
+                    {/* Title skeleton */}
+                    <div className="flex items-center gap-2">
+                      <div className="h-7 bg-secondary dark:bg-gray-800 rounded-md w-3/5 animate-pulse" />
+                    </div>
+
+                    {/* Image skeleton */}
+                    <div className="w-full flex justify-center">
+                      <div className="h-64 w-full max-w-md bg-secondary dark:bg-gray-800 rounded-md animate-pulse my-4" />
+                    </div>
+
+                    {/* Content paragraph skeletons */}
+                    <div className="space-y-3">
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-full animate-pulse" />
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-full animate-pulse" />
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-5/6 animate-pulse" />
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-full animate-pulse" />
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-4/5 animate-pulse" />
+                    </div>
+
+                    {/* Mission title skeleton */}
+                    <div className="h-6 bg-secondary dark:bg-gray-800 rounded-md w-1/4 animate-pulse mt-6" />
+
+                    {/* Mission content skeleton */}
+                    <div className="space-y-3">
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-full animate-pulse" />
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-full animate-pulse" />
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-3/4 animate-pulse" />
+                    </div>
+
+                    {/* Project title skeleton */}
+                    <div className="h-6 bg-secondary dark:bg-gray-800 rounded-md w-1/4 animate-pulse mt-6" />
+
+                    {/* Project content skeleton */}
+                    <div className="space-y-3">
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-full animate-pulse" />
+                      <div className="h-4 bg-secondary dark:bg-gray-800 rounded-md w-5/6 animate-pulse" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Share button skeleton */}
+                <div className="mt-6 flex gap-2">
+                  <div className="h-9 w-24 bg-secondary dark:bg-gray-800 rounded-md animate-pulse" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right sidebar */}
+          <div className="w-full md:w-1/4 md:sticky md:top-6 md:self-start">
+            <SidebarContent limit={6} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (!pageData) {
