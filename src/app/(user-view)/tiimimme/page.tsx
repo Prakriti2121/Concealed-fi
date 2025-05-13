@@ -1,4 +1,6 @@
 import { TeamContent } from "./components/TeamContent";
+import { breadcrumbSchemaGenerator } from "../../utils/utils";
+import { personSchema } from "../../utils/constants";
 
 export async function generateMetadata() {
   // Build an absolute URL from an environment variable or default to localhost
@@ -7,10 +9,13 @@ export async function generateMetadata() {
   const data = await res.json();
 
   return {
+    metadataBase: new URL(baseUrl),
     title: data.seoTitle || data.title,
     description:
       data.metaDesc ||
       "Meet the team behind Concealed Wines, your trusted wine importers in Scandinavia.",
+    robots:
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     alternates: {
       canonical: data.canonicalUrl || baseUrl,
     },
@@ -18,10 +23,30 @@ export async function generateMetadata() {
 }
 
 const VartTeamPage = () => {
+  // Generate breadcrumb schema
+  const breadcrumbs = breadcrumbSchemaGenerator([
+    {
+      name: "Tiimimme",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/tiimimme`,
+    },
+  ]);
+
+  // Convert personSchema to JSON string
+  const personSchemaJson = JSON.stringify(personSchema);
   return (
-    <div>
-      <TeamContent />
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: personSchemaJson }}
+      />
+      <div>
+        <TeamContent />
+      </div>
+    </>
   );
 };
 

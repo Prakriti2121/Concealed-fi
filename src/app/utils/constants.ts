@@ -283,4 +283,3 @@ export const personSchema = {
   },
   url: "https://www.concealed-wines.fi/tiimimme/calle-nilsson/",
 };
-

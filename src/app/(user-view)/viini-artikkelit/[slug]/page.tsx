@@ -1,4 +1,8 @@
 import ArticlePageClient from "../components/ArticlePageClient";
+import {
+  breadcrumbSchemaGenerator,
+  postSchemaGenerator,
+} from "../../../utils/utils";
 
 export async function generateMetadata({
   params,
@@ -14,7 +18,7 @@ export async function generateMetadata({
   });
 
   if (!res.ok) {
-    // Fallback metadata if the post isn’t found
+    // Fallback metadata if the post isn't found
     return {
       title: "Post not found",
       description: "The post you are looking for could not be found.",
@@ -39,5 +43,46 @@ export default async function ArticlePage({
 }) {
   // Await the params promise to extract the slug
   const { slug } = await params;
-  return <ArticlePageClient slug={slug} />;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+  // Fetch article data
+  const res = await fetch(`${baseUrl}/api/viini-artikkelit/${slug}`, {
+    cache: "no-cache",
+  });
+
+  if (!res.ok) {
+    // Handle case where post isn't found
+    return <div>Post not found</div>;
+  }
+
+  const postData = await res.json();
+
+  // Breadcrumb schema
+  const breadcrumbs = breadcrumbSchemaGenerator([
+    {
+      name: "Viini Artikkelit",
+      url: `${baseUrl}/viini-artikkelit`,
+    },
+    {
+      name: postData.title,
+      url: `${baseUrl}/viini-artikkelit/${slug}`,
+    },
+  ]);
+
+  // Generate post schema
+  const postSchema = postSchemaGenerator(postData);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: postSchema }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <ArticlePageClient slug={slug} />
+    </>
+  );
 }
