@@ -9,11 +9,14 @@ export async function generateMetadata() {
   const data = await res.json();
 
   return {
-    title: data.seoTitle || data.title,
+     metadataBase: new URL(baseUrl),
+    title: data.seoTitle || "Ota yhteyttä - Concealed Wines Finland",
     description:
       data.metaDesc || "Get in touch with Concealed Wines. We're here to help!",
+    robots:
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     alternates: {
-      canonical: data.canonicalUrl || baseUrl,
+      canonical: data.canonicalUrl || `${baseUrl}/ota-yhteytta`,
     },
   };
 }

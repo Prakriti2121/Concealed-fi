@@ -9,13 +9,17 @@ import { Metadata } from "next";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 export async function generateMetadata(): Promise<Metadata> {
   const resSeo = await fetch(`${baseUrl}/api/etusivu`, { cache: "no-cache" });
-  const seoData = await resSeo.json();
+  const data = await resSeo.json();
 
   return {
-    title: seoData.seoTitle || seoData.title,
-    description: seoData.metaDesc,
+    metadataBase: new URL(baseUrl),
+    title: data.seoTitle || data.title,
+    description:
+      data.metaDesc || "Welcome to Concealed Wines Finland homepage!",
+    robots:
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     alternates: {
-      canonical: seoData.canonicalUrl,
+      canonical: data.canonicalUrl || baseUrl,
     },
   };
 }
