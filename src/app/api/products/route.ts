@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
 }
 
 // NEW GET handler: fetch only featured products for banner
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Query only products where featured is true
     const featuredProducts = await prisma.product.findMany({

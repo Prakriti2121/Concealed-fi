@@ -61,7 +61,18 @@ export async function PUT(
   try {
     // Parse the incoming form data (multipart/form-data)
     const formData = await req.formData();
-    const data: any = {};
+
+    // Define a proper interface for the product data
+    interface ProductData {
+      [key: string]:
+        | string
+        | number
+        | boolean
+        | Array<string>
+        | Record<string, unknown>;
+    }
+
+    const data: ProductData = {};
 
     // List of keys that are booleans in your Prisma model
     const booleanKeys = [
@@ -104,8 +115,11 @@ export async function PUT(
         data[key] = value === "true";
       } else if (value === "" || value === null) {
         continue;
+      } else if (value instanceof File) {
+        // Handle File objects appropriately or skip them
+        continue;
       } else {
-        data[key] = value;
+        data[key] = value as string;
       }
     }
 

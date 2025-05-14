@@ -32,9 +32,13 @@ const Jumbotron = () => {
         if (products.length) {
           setLatestProduct(products[0]);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error(err);
-        setError(err.message || "Error fetching product");
+        if (err instanceof Error) {
+          setError(err.message || "Error fetching product");
+        } else {
+          setError("Error fetching product");
+        }
       } finally {
         setTimeout(() => setIsLoading(false), 300);
       }

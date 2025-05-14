@@ -36,9 +36,13 @@ const FeaturedProduct = () => {
         if (!response.ok) throw new Error("Failed to fetch products");
         const data: Product[] = await response.json();
         setProducts(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching products:", err);
-        setError(err.message || "Failed to load products");
+        if (err instanceof Error) {
+          setError(err.message || "Failed to load products");
+        } else {
+          setError("Failed to load products");
+        }
       } finally {
         setIsLoading(false);
       }

@@ -21,7 +21,7 @@ interface FeaturedProduct {
 }
 
 export default function SimplifiedBannerSection() {
-  const [bannerItems, setBannerItems] = useState<BannerItem[]>([]);
+  const [, setBannerItems] = useState<BannerItem[]>([]);
   const [featuredProducts, setFeaturedProducts] = useState<FeaturedProduct[]>(
     []
   );

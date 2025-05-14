@@ -494,7 +494,7 @@ export default function EditProductForm() {
           <FormField
             control={form.control}
             name="largeImage"
-            render={({ field: { onChange, value, ...field } }) => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Product Image</FormLabel>
                 <FormControl>
@@ -506,12 +506,14 @@ export default function EditProductForm() {
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          onChange(file);
+                          field.onChange(file);
                           const objectUrl = URL.createObjectURL(file);
                           setPreviewUrl(objectUrl);
                         }
                       }}
-                      {...field}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
                     />
                     {previewUrl && (
                       <div className="relative w-40 h-40">

@@ -34,7 +34,7 @@ interface Product {
   sortiment?: string;
   tagLine?: string;
   producerUrl?: string;
-  taste?: any;
+  taste?: string | string[] | Record<string, unknown>;
   awards?: string;
   additionalInfo?: string;
   bottleVolume?: number;
@@ -140,16 +140,12 @@ export function profilePageSchemaGenerator(profile: TeamMember): string {
   return JSON.stringify(profileSchema);
 }
 
-export function productSchemaGenerator(
-  product: Product
-): string {
+export function productSchemaGenerator(product: Product): string {
   const validUntil = new Date();
   validUntil.setMonth(validUntil.getMonth() + 3);
 
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL || "https://www.concealedwines.fi";
-
- 
 
   const productSchema = {
     "@context": "http://schema.org/",
