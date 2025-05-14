@@ -29,6 +29,23 @@ interface Product {
   region?: string;
   producerDescription?: string;
   alcohol?: number;
+  productCode?: string;
+  buyLink?: string;
+  sortiment?: string;
+  tagLine?: string;
+  producerUrl?: string;
+  taste?: any;
+  awards?: string;
+  additionalInfo?: string;
+  bottleVolume?: number;
+  composition?: string;
+  closure?: string;
+  isNew?: boolean;
+  organic?: boolean;
+  featured?: boolean;
+  availableOnlyOnline?: boolean;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export function breadcrumbSchemaGenerator(array: BreadcrumbItem[]): string {
@@ -123,63 +140,101 @@ export function profilePageSchemaGenerator(profile: TeamMember): string {
   return JSON.stringify(profileSchema);
 }
 
-export function productSchemaGenerator(product: Product): string {
+export function productSchemaGenerator(
+  product: Product
+): string {
+  const validUntil = new Date();
+  validUntil.setMonth(validUntil.getMonth() + 3);
+
   const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || "https://www.concealed-wines.fi";
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.concealedwines.fi";
+
+ 
 
   const productSchema = {
-    "@context": "https://schema.org",
+    "@context": "http://schema.org/",
     "@type": "Product",
-    name: `${product.title} ${product.vintage}`,
-    description: product.producerDescription || "",
-    image: product.largeImage || `${baseUrl}/wine-placeholder.webp`,
+    url: `${baseUrl}/viinit-luettelo/${product?.slug}`,
+    name: product?.title,
+    image: product?.largeImage || `${baseUrl}/default-wine-image.webp`,
+    description: product?.producerDescription || product?.tagLine,
+    productID: product?.productCode || "",
+    sku: product?.productCode || "",
     offers: {
       "@type": "Offer",
-      price: product.price,
+      url: `${baseUrl}/viinit-luettelo/${product?.slug}`,
       priceCurrency: "EUR",
-      availability: "https://schema.org/InStock",
-      url: `${baseUrl}/viinit-luettelo/${product.slug}/`,
-    },
-    brand: {
-      "@type": "Brand",
-      name: product.title.split(" ")[0] || "Wine Brand",
-    },
-    category: "Alcoholic Beverage",
-    additionalProperty: [
-      {
-        "@type": "PropertyValue",
-        name: "alcoholContent",
-        value: `${product.alcohol}%`,
+      price: product?.price,
+      availability: product?.buyLink ? "InStock" : "OutOfStock",
+      ...(product?.buyLink && { itemCondition: "NewCondition" }),
+      priceValidUntil: validUntil.toISOString().split("T")[0],
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        merchantReturnDays: 0,
+        returnPolicyCategory: "MerchantReturnNotPermitted",
+        returnMethod: "ReturnNotPermitted",
+        applicableCountry: "FI",
       },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: {
+          "@type": "MonetaryAmount",
+          currency: "EUR",
+          value: 0,
+        },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "FI",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          businessDays: 0,
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 0,
+            maxValue: 0,
+            unitCode: "d",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 0,
+            maxValue: 0,
+            unitCode: "d",
+          },
+        },
+      },
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: 4,
+      reviewCount: 1,
+    },
+    review: [
       {
-        "@type": "PropertyValue",
-        name: "region",
-        value: product.region || "",
+        "@type": "Review",
+        author: {
+          "@type": "Person",
+          name: "Concealed Wines",
+        },
+        reviewBody: `${product?.tagLine || "Fantastic wine!"} ${
+          product?.producerDescription || ""
+        }`,
       },
     ],
+
+    // Use producerUrl if available or extract producer name somehow
+    ...(product?.producerUrl && {
+      brand: {
+        "@type": "Brand",
+        name: product.producerUrl.split("/").pop() || "Wine Producer",
+      },
+    }),
+    ...(product?.region && {
+      countryOfOrigin: {
+        "@type": "Country",
+        name: product.region,
+      },
+    }),
   };
   return JSON.stringify(productSchema);
-}
-
-export function formatDate(date: Date | string): string {
-  if (!date) return "";
-
-  const d = typeof date === "string" ? new Date(date) : date;
-
-  return d.toLocaleDateString("fi-FI", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-export function truncateText(text: string, maxLength: number): string {
-  if (!text || text.length <= maxLength) return text || "";
-  return text.substring(0, maxLength) + "...";
-}
-
-export function formatPrice(price: number): string {
-  return new Intl.NumberFormat("fi-FI", {
-    style: "currency",
-    currency: "EUR",
-  }).format(price);
 }

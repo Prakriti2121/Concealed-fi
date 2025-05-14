@@ -20,6 +20,7 @@ import {
 import BreadCrumb from "../../components/breadcrumb/breadcrumb";
 import SharePopover from "../components/SharePopover";
 import { Metadata } from "next";
+import { productSchemaGenerator } from "@/app/utils/utils";
 
 export const revalidate = 0;
 
@@ -52,12 +53,62 @@ export async function generateMetadata({
       ? `https://${process.env.VERCEL_URL}`
       : "http://localhost:3000");
   const canonicalUrl = `${baseUrl}/viinit-luettelo/${slug}`;
+  // Create a simplified product object that matches our interface
+  const productData = {
+    title: product.title,
+    slug: product.slug,
+    vintage: product.vintage,
+    price: product.price,
+    largeImage: product.largeImage,
+    region: product.region,
+    producerDescription: product.producerDescription || undefined,
+    alcohol: product.alcohol,
+    productCode: product.productCode,
+    buyLink: product.buyLink,
+    sortiment: product.sortiment,
+    tagLine: product.tagLine,
+    producerUrl: product.producerUrl,
+    bottleVolume: product.bottleVolume,
+    composition: product.composition,
+    closure: product.closure,
+    isNew: product.isNew,
+    organic: product.organic,
+    featured: product.featured,
+    availableOnlyOnline: product.availableOnlyOnline,
+  };
+
+  // Generate product schema for JSON-LD
+  const productJsonLd = productSchemaGenerator(productData);
 
   return {
     title: seoTitle,
     description,
     alternates: {
       canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: seoTitle,
+      description,
+      url: canonicalUrl,
+      images: [
+        {
+          url: product.largeImage || "/placeholder-wine.png",
+          width: 1200,
+          height: 630,
+          alt: seoTitle,
+        },
+      ], // Must be one of the valid OpenGraph types
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seoTitle,
+      description,
+      images: [product.largeImage || "/placeholder-wine.png"],
+    },
+    other: {
+      // Add the JSON-LD as a script tag
+      "script:product-json-ld": ["application/ld+json", productJsonLd],
     },
   };
 }
@@ -97,8 +148,41 @@ export default async function Page({ params }: PageProps) {
     return pairings;
   };
 
+  // Create data for product schema
+  const productData = {
+    title: product.title,
+    slug: product.slug,
+    vintage: product.vintage,
+    price: product.price,
+    largeImage: product.largeImage,
+    region: product.region,
+    producerDescription: product.producerDescription || undefined,
+    alcohol: product.alcohol,
+    productCode: product.productCode,
+    buyLink: product.buyLink,
+    sortiment: product.sortiment,
+    tagLine: product.tagLine,
+    producerUrl: product.producerUrl,
+    bottleVolume: product.bottleVolume,
+    composition: product.composition,
+    closure: product.closure,
+    isNew: product.isNew,
+    organic: product.organic,
+    featured: product.featured,
+    availableOnlyOnline: product.availableOnlyOnline,
+  };
+
+  // Generate JSON-LD schema
+  const productJsonLd = productSchemaGenerator(productData);
+
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* JSON-LD Schema for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: productJsonLd }}
+      />
+
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 mb-6 text-sm">
         <BreadCrumb
