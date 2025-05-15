@@ -156,7 +156,7 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({ images }) => {
                 alt={image.name}
                 width={300}
                 height={192}
-                className="w-full h-48 object-cover transition-transform duration-300 hover:scale-110 hover:opacity-90 rounded-lg"
+                className="w-full h-48 object-contain transition-transform duration-300 hover:scale-110 hover:opacity-90 rounded-lg"
               />
               {/* Delete Button */}
               <button
@@ -187,7 +187,7 @@ const MediaGallery: React.FC<MediaGalleryProps> = ({ images }) => {
                 alt={selectedImage.name}
                 width={600}
                 height={256}
-                className="w-full h-64 object-cover rounded-md mb-4"
+                className="w-full h-64 object-contain rounded-md mb-4"
               />
               <div className="space-y-2 text-xs">
                 <p>

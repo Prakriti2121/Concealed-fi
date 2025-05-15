@@ -18,14 +18,14 @@ export default async function Layout({
   return (
     <div>
       <SidebarProvider>
-        <div className="relative">
+        <div className="relative w-1/5">
           <AppSidebar />
-          <div className="absolute right-12 top-0">
+          <div className="absolute right-0 top-0 z-50">
             <SidebarTrigger />
           </div>
         </div>
 
-        <div>{children}</div>
+        <div className="w-4/5">{children}</div>
       </SidebarProvider>
     </div>
   );
