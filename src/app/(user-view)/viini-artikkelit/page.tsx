@@ -1,0 +1,48 @@
+import React from "react";
+import { ArticleContent } from "./components/ArticleContent";
+import { breadcrumbSchemaGenerator } from "../../utils/utils";
+
+export async function generateMetadata() {
+  // Build the absolute URL using an environment variable or fallback to localhost
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const res = await fetch(`${baseUrl}/api/viini-artikkelit`, {
+    cache: "no-cache",
+  });
+  const data = await res.json();
+
+  return {
+    metadataBase: new URL(baseUrl),
+    title: data.seoTitle || data.title,
+    description:
+      data.metaDesc || "Latest news and updates from Concealed Wines.",
+    robots:
+      "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+    alternates: {
+      canonical: data.canonicalUrl || baseUrl,
+    },
+  };
+}
+
+const page = () => {
+  // Generate breadcrumb schema
+  const breadcrumbs = breadcrumbSchemaGenerator([
+    {
+      name: "Viini Artikkelit",
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/viini-artikkelit`,
+    },
+  ]);
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-6">Article</h1>
+        <ArticleContent />
+      </div>
+    </>
+  );
+};
+
+export default page;

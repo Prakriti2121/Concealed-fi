@@ -1,64 +1,89 @@
 "use client";
-import React from "react";
-import Image from "next/image";
-import Container from "../atoms/Container";
-import { Button } from "../ui/button";
-import { motion, useScroll } from "motion/react";
 
-const AboutUs = () => {
-  const { scrollYProgress } = useScroll();
+import Image from "next/image";
+import { motion } from "framer-motion";
+import Container from "@/components/atoms/Container";
+import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import Link from "next/link";
+
+interface AboutUsProps {
+  data: {
+    title: string;
+    seoTitle: string;
+    content: string;
+    featuredImage: string;
+    canonicalUrl: string;
+  };
+}
+
+const AboutUs: React.FC<AboutUsProps> = ({ data }) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 60 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+    },
+  };
 
   return (
     <Container>
       <motion.div
-        style={{ scaleX: scrollYProgress }}
-        className="md:grid grid-cols-2 items-stretch gap-12"
+        initial="hidden"
+        whileInView="visible"
+        id="about"
+        viewport={{ once: true, margin: "-100px" }}
+        className={`${
+          isDesktop ? "grid grid-cols-2 items-center" : "flex flex-col"
+        } gap-12`}
       >
-        {/* Image section: Animates on scroll (fade in from bottom) */}
+        {/* Image section */}
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeInUp}
+          className={`${isDesktop ? "order-1" : "order-1"}`}
         >
-          <div className="">
+          <div className="relative overflow-hidden rounded-[40px] shadow-lg">
             <Image
-              src="/images/barrels.jpg"
+              src={data.featuredImage || "/images/placeholder.jpg"}
               alt="About Us"
               width={500}
               height={500}
-              className="w-full h-full object-cover rounded-[60px] "
+              className="w-full aspect-square object-cover transform hover:scale-105 transition-transform duration-700"
             />
+            <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-xl"></div>
           </div>
         </motion.div>
 
-        {/* Text section: Animates on scroll (fade in from bottom) with a slight delay */}
+        {/* Text section */}
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeInUp}
+          className={`${isDesktop ? "order-2" : "order-2"} space-y-6`}
         >
-          <h4 className="text-4xl md:text-6xl font-black my-6">About Us</h4>
-          <p className="mt-12 text-gray-700 font-light text-xl">
-            Concealed Wines on pohjoismaisten markkinoiden viinintoimittaja.
-            Meidän tavoitteemme on tarjota loistoviinejä kuluttajille. Tällä
-            hetkellä myymme muutamia laatuviinejä Suomessa ja samanaikaisesti
-            tuomme markkinoille uusia viinejä.
-          </p>
-          <p className="mt-12 text-gray-700 font-light text-xl">
-            Esittelemme tällä nettisivulla viinejä, joita maahantuomme Suomeen.
-            Saadaksesi lisätietoja Concealed Wines yhtiöstä, vieraile
-            osoitteessa
-          </p>
+          <h2 className="text-4xl md:text-5xl font-black relative">
+            {data.title}
+            <span className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary/5 text-7xl md:text-8xl font-black">
+              {data.title}
+            </span>
+          </h2>
 
-          <div className="mt-12">
-            <Button className="relative overflow-hidden bg-[#09090B] text-xl px-4 py-2 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black">
-              <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
-                Read More
-              </span>
-              <span className="absolute left-0 top-0 w-0 h-full bg-white transition-all duration-500 ease-in-out group-hover:w-full"></span>
-            </Button>
+          <div className="space-y-6 text-gray-700 font-light text-lg relative">
+            {/* Render content as HTML */}
+            <p dangerouslySetInnerHTML={{ __html: data.content }}></p>
+            <div className="absolute -top-10 -left-10 w-20 h-20 bg-primary/5 rounded-full blur-xl"></div>
+          </div>
+
+          <div className="pt-4">
+            <Link href="/yrityksen-profiili">
+              <Button className="relative overflow-hidden bg-[#09090B] text-xl px-6 py-3 h-full text-white border border-transparent group transition-all duration-300 ease-in-out hover:border-black">
+                <span className="relative z-10 transition-all duration-300 ease-in-out group-hover:text-black">
+                  Lue lisää
+                </span>
+                <span className="absolute left-0 top-0 w-0 h-full bg-white transition-all duration-500 ease-in-out group-hover:w-full"></span>
+              </Button>
+            </Link>
           </div>
         </motion.div>
       </motion.div>

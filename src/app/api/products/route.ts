@@ -1,5 +1,3 @@
-// app/api/products/route.js
-
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { writeFile } from "fs/promises";
@@ -77,8 +75,6 @@ export async function POST(request: NextRequest) {
     const vegetables = formData.get("vegetables") === "true";
     const roastedVegetables = formData.get("roastedVegetables") === "true";
     const softCheese = formData.get("softCheese") === "true";
-
-    // Note: There are typos ("ture" instead of "true") in the following fields.
     const fish = formData.get("fish") === "true";
     const richFish = formData.get("richFish") === "true";
     const whiteMeatPoultry = formData.get("whiteMeatPoultry") === "true";
@@ -88,11 +84,9 @@ export async function POST(request: NextRequest) {
     const gameMeat = formData.get("gameMeat") === "true";
     const curedMeat = formData.get("curedMeat") === "true";
     const sweets = formData.get("sweets") === "true";
-    // const bottleVolume = formData.get("bottleVolume");
     const bottleVolume = formData.get("bottleVolume")
       ? parseFloat(formData.get("bottleVolume")?.toString() ?? "0")
       : 0;
-
     const alcohol = formData.get("alcohol")
       ? parseFloat(formData.get("alcohol")?.toString() ?? "0")
       : 0;
@@ -146,6 +140,23 @@ export async function POST(request: NextRequest) {
     console.error("Error creating product:", error);
     return NextResponse.json(
       { error: "Error creating product" },
+      { status: 500 }
+    );
+  }
+}
+
+// NEW GET handler: fetch only featured products for banner
+export async function GET() {
+  try {
+    // Query only products where featured is true
+    const featuredProducts = await prisma.product.findMany({
+      where: { featured: true },
+    });
+    return NextResponse.json(featuredProducts, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching featured products:", error);
+    return NextResponse.json(
+      { error: "Error fetching featured products" },
       { status: 500 }
     );
   }

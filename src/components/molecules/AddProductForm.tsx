@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-
-// Import ShadCN UI components (adjust the import paths according to your project structure)
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -98,6 +97,7 @@ type ProductFormValues = z.infer<typeof productSchema>;
 
 export default function AddProductForm() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const router = useRouter();
 
   // Add cleanup function
   useEffect(() => {
@@ -187,6 +187,7 @@ export default function AddProductForm() {
       await response.json();
 
       toast.success("Product created successfully");
+      router.push("/admin/wines");
     } catch (error) {
       console.error("Error creating product:", error);
       alert("Error creating product");
@@ -317,7 +318,9 @@ export default function AddProductForm() {
                       // If the input is empty, you might want to set it to an empty string or a default number.
                       // Here, we'll convert the value to a float, or set it to empty if the input is empty.
                       const value = e.target.value;
-                      field.onChange(value === "" ? "" : parseFloat(value));
+                      field.onChange(
+                        value === "" ? "" : Number.parseFloat(value)
+                      );
                     }}
                   />
                 </FormControl>
@@ -377,11 +380,11 @@ export default function AddProductForm() {
             name="producerUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Producer URL</FormLabel>
+                <FormLabel>Producer</FormLabel>
                 <FormControl>
                   <Input
-                    type="url"
-                    placeholder="https://example.com"
+                    type="text"
+                    placeholder="Producer"
                     {...field}
                   />
                 </FormControl>
@@ -487,7 +490,7 @@ export default function AddProductForm() {
                     {previewUrl && (
                       <div className="relative w-40 h-40">
                         <Image
-                          src={previewUrl}
+                          src={previewUrl || "/placeholder.svg"}
                           alt="Preview"
                           fill
                           className="object-contain"
@@ -801,7 +804,9 @@ export default function AddProductForm() {
                       // If the input is empty, you might want to set it to an empty string or a default number.
                       // Here, we'll convert the value to a float, or set it to empty if the input is empty.
                       const value = e.target.value;
-                      field.onChange(value === "" ? "" : parseFloat(value));
+                      field.onChange(
+                        value === "" ? "" : Number.parseFloat(value)
+                      );
                     }}
                   />
                 </FormControl>
@@ -825,7 +830,9 @@ export default function AddProductForm() {
                       // If the input is empty, you might want to set it to an empty string or a default number.
                       // Here, we'll convert the value to a float, or set it to empty if the input is empty.
                       const value = e.target.value;
-                      field.onChange(value === "" ? "" : parseFloat(value));
+                      field.onChange(
+                        value === "" ? "" : Number.parseFloat(value)
+                      );
                     }}
                   />
                 </FormControl>

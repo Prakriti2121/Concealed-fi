@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -24,8 +21,8 @@ model User {
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-
+  id    Int    @id @default(autoincrement())
+  slug  String @unique @default(cuid())
   title String @default("Untitled Product")
 
   // Wine Fields
@@ -42,10 +39,9 @@ model Product {
   // Additional Product Info
   largeImage          String // URL of large image
   buyLink             String // URL to buy the product
-  sortiment           String // Tillfälliga sortimentet , Beställning sortimentet, Exklusiva sortimentet, Fasta Sortimentet
+  sortiment           String
   tagLine             String
-  // producerDescription String @db.Text
-  producerDescription String @db.LongText
+  producerDescription String? @db.LongText // Optional field for producer description
 
   producerUrl    String // URL (or other meaning as required)
   region         String
@@ -78,4 +74,80 @@ model Product {
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id              Int        @id @default(autoincrement())
+  title           String
+  content         String     @db.Text
+  slug            String     @unique
+  featuredImage   String?
+  author          String?
+  seoTitle        String?
+  metaDesc        String?
+  canonicalUrl    String?
+  published       Boolean    @default(false)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  isUncategorized Boolean?
+  tags            Tag[]
+  categories      Category[]
+  comments        Comment[]
+}
+
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[]
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  slug        String?
+  image       String?
+  description String?
+  posts       Post[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  author    String
+  content   String
+  createdAt DateTime @default(now())
+  approved  Boolean  @default(false)
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Page {
+  id            Int      @id @default(autoincrement())
+  title         String
+  content       String   @db.Text
+  slug          String   @unique
+  featuredImage String?
+  author        String?
+  seoTitle      String?
+  metaDesc      String?
+  canonicalUrl  String?
+  published     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model TeamMember {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?  @db.Text
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Banner {
+  id          Int     @id @default(autoincrement())
+  title       String?
+  link        String?
+  image       String?
+  description String?
 }

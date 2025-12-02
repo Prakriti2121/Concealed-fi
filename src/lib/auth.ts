@@ -1,5 +1,4 @@
 // @ts-nocheck
-/* eslint-disable */
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient, User as PrismaUser } from "@prisma/client";
@@ -47,9 +46,8 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
           throw new Error("Invalid password");
         }
 
-        // Exclude sensitive information by omitting the password field
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, ...userWithoutPassword } = user;
+        const { password: _password, ...userWithoutPassword } = user;
 
         return userWithoutPassword as UserWithoutPassword;
       },
@@ -60,7 +58,6 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, user }: { token: any; user: any }) {
       // When user is available (during sign in), attach the user info to the token.
       if (user) {
