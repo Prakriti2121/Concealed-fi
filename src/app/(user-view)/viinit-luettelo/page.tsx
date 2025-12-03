@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import React from "react";
-import { breadcrumbSchemaGenerator } from "../../utils/utils";
+import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
 
 interface PageProps {
   searchParams: {

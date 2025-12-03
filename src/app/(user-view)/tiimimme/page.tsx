@@ -1,5 +1,5 @@
 import { TeamContent } from "./components/TeamContent";
-import { breadcrumbSchemaGenerator } from "../../utils/utils";
+import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
 import { personSchema } from "../../utils/constants";
 
 export async function generateMetadata() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { ArticleContent } from "./components/ArticleContent";
-import { breadcrumbSchemaGenerator } from "../../utils/utils";
+import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
 
 export async function generateMetadata() {
   // Build the absolute URL using an environment variable or fallback to localhost

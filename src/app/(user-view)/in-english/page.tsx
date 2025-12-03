@@ -1,5 +1,5 @@
 import EnglishContent from "./components/EnglishContent";
-import { breadcrumbSchemaGenerator } from "../../utils/utils";
+import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
 
 // Dynamically fetch metadata on the server
 export async function generateMetadata() {

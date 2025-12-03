@@ -1,3 +1,4 @@
+// Type definitions for schema generators
 interface BreadcrumbItem {
   name: string;
   url: string;
@@ -48,8 +49,8 @@ interface Product {
   updatedAt?: string | Date;
 }
 
+// Breadcrumb Schema Generator
 export function breadcrumbSchemaGenerator(array: BreadcrumbItem[]): string {
-  // Get base URL from environment or use default
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL || "https://www.concealed-wines.fi";
 
@@ -76,6 +77,50 @@ export function breadcrumbSchemaGenerator(array: BreadcrumbItem[]): string {
   return JSON.stringify(breadcrumbs);
 }
 
+// Organization Schema Generator
+export function organizationSchema() {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.concealed-wines.fi";
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${baseUrl}/#organization`,
+        name: "Concealed Wines",
+        url: baseUrl,
+        logo: "https://www.concealedwines.com/uploads/media/70e6fc0e-befe-40e7-bf25-a54e5b18d53b.jpg",
+        image:
+          "https://www.concealedwines.com/uploads/media/70e6fc0e-befe-40e7-bf25-a54e5b18d53b.jpg",
+        email: "info@concealedwines.com",
+        telephone: "+46 8-410 244 34",
+        founder: {
+          "@type": "Person",
+          name: "Calle Nilsson",
+          url: `${baseUrl}/author/callenil363/`,
+        },
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Bo Bergmans gata 14",
+          postalCode: "11550",
+          addressLocality: "Stockholm",
+          addressCountry: "SE",
+        },
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: "+46 8-410 244 34",
+          contactType: "customer service",
+          email: "info@concealedwines.com",
+          areaServed: "EN",
+          availableLanguage: ["English"],
+        },
+      },
+    ],
+  };
+  return JSON.stringify(organizationSchema);
+}
+
+// Post Schema Generator
 export function postSchemaGenerator(post: Post): string {
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL || "https://www.concealed-wines.fi";
@@ -110,6 +155,7 @@ export function postSchemaGenerator(post: Post): string {
   return JSON.stringify(postSchema);
 }
 
+// Profile Page Schema Generator
 export function profilePageSchemaGenerator(profile: TeamMember): string {
   const baseUrl =
     process.env.NEXT_PUBLIC_BASE_URL || "https://www.concealed-wines.fi";
@@ -140,6 +186,7 @@ export function profilePageSchemaGenerator(profile: TeamMember): string {
   return JSON.stringify(profileSchema);
 }
 
+// Product Schema Generator
 export function productSchemaGenerator(product: Product): string {
   const validUntil = new Date();
   validUntil.setMonth(validUntil.getMonth() + 3);

@@ -1,5 +1,5 @@
 import { ProfileContent } from "./Components/ProfileContent";
-import { breadcrumbSchemaGenerator } from "../../utils/utils";
+import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
 import { aboutSchema } from "../../utils/constants";
 
 // This function runs on the server and dynamically generates metadata

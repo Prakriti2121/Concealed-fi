@@ -2,7 +2,7 @@ import ArticlePageClient from "../components/ArticlePageClient";
 import {
   breadcrumbSchemaGenerator,
   postSchemaGenerator,
-} from "../../../utils/utils";
+} from "@/app/utils/schemaUtils";
 
 export async function generateMetadata({
   params,

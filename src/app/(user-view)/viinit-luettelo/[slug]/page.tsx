@@ -20,7 +20,7 @@ import {
 import BreadCrumb from "../../components/breadcrumb/breadcrumb";
 import SharePopover from "../components/SharePopover";
 import { Metadata } from "next";
-import { productSchemaGenerator } from "@/app/utils/utils";
+import { productSchemaGenerator } from "@/app/utils/schemaUtils";
 
 export const revalidate = 0;
 
