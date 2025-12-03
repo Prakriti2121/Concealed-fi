@@ -1,5 +1,5 @@
 import { ProfileContent } from "./Components/ProfileContent";
-import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
+import { breadcrumbSchemaGenerator, organizationSchema } from "@/app/utils/schemaUtils";
 import { aboutSchema } from "../../utils/constants";
 
 // This function runs on the server and dynamically generates metadata
@@ -33,6 +33,9 @@ const SelskapProfilePage = () => {
     },
   ]);
 
+  // Generate organization schema
+  const organization = organizationSchema();
+
   // Convert aboutSchema to JSON string
   const aboutSchemaJson = JSON.stringify(aboutSchema);
   return (
@@ -40,6 +43,10 @@ const SelskapProfilePage = () => {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: organization }}
       />
       <script
         type="application/ld+json"

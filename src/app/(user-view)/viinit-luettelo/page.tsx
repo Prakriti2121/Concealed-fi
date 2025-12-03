@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import React from "react";
-import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
+import { breadcrumbSchemaGenerator, organizationSchema } from "@/app/utils/schemaUtils";
 
 interface PageProps {
   searchParams: {
@@ -71,12 +71,20 @@ export default async function Page({ searchParams }: PageProps) {
     },
   ]);
 
+  // Generate organization schema
+  const organization = organizationSchema();
+
   return (
     <>
       <script
         type="application/ld+json"
         className="rank-math-schema"
         dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        className="rank-math-schema"
+        dangerouslySetInnerHTML={{ __html: organization }}
       />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl md:text-4xl font-black mb-8">All Wines</h1>

@@ -1,5 +1,5 @@
 import { ContactContent } from "./components/ContactContent";
-import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
+import { breadcrumbSchemaGenerator, organizationSchema } from "@/app/utils/schemaUtils";
 
 // Dynamically fetch metadata on the server
 export async function generateMetadata() {
@@ -97,11 +97,19 @@ const KontaktOssPage = () => {
       },
     ],
   };
+
+  // Generate organization schema
+  const organization = organizationSchema();
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: organization }}
       />
       <script
         type="application/ld+json"

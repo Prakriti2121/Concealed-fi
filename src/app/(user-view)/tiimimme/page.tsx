@@ -1,5 +1,5 @@
 import { TeamContent } from "./components/TeamContent";
-import { breadcrumbSchemaGenerator } from "@/app/utils/schemaUtils";
+import { breadcrumbSchemaGenerator, organizationSchema } from "@/app/utils/schemaUtils";
 import { personSchema } from "../../utils/constants";
 
 export async function generateMetadata() {
@@ -31,6 +31,9 @@ const VartTeamPage = () => {
     },
   ]);
 
+  // Generate organization schema
+  const organization = organizationSchema();
+
   // Convert personSchema to JSON string
   const personSchemaJson = JSON.stringify(personSchema);
   return (
@@ -38,6 +41,10 @@ const VartTeamPage = () => {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: organization }}
       />
       <script
         type="application/ld+json"
