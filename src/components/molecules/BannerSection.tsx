@@ -76,7 +76,7 @@ export default function SimplifiedBannerSection() {
 
   if (isLoading) {
     return (
-      <div className="relative w-full h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[50vh] xl:h-[55vh] overflow-hidden bg-gray-400">
+      <section className="relative w-screen left-1/2 -translate-x-1/2 h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[50vh] xl:h-[55vh] overflow-hidden bg-gray-400">
         {/* Skeleton dark gradient background */}
         <div className="absolute inset-0 bg-gradient-to-r from-gray-450 via-gray-350 to-gray-450 animate-pulse" />
 
@@ -124,17 +124,17 @@ export default function SimplifiedBannerSection() {
             />
           ))}
         </div>
-      </div>
+      </section>
     );
   }
 
   if (!selectedBanner || featuredProducts.length === 0) {
     return (
-      <div className="w-full h-[30vh] sm:h-[35vh] md:h-[40vh] flex items-center justify-center bg-gray-50">
+      <section className="relative w-screen left-1/2 -translate-x-1/2 h-[30vh] sm:h-[35vh] md:h-[40vh] flex items-center justify-center bg-gray-50">
         <p className="text-sm sm:text-base text-gray-200 font-medium px-4 text-center">
           No banner or featured products available
         </p>
-      </div>
+      </section>
     );
   }
 
@@ -142,7 +142,7 @@ export default function SimplifiedBannerSection() {
   const currentProduct = featuredProducts[currentProductIndex];
 
   return (
-    <div className="relative w-full h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[50vh] xl:h-[55vh] overflow-hidden">
+    <section className="relative w-screen left-1/2 -translate-x-1/2 h-[40vh] sm:h-[42vh] md:h-[45vh] lg:h-[50vh] xl:h-[55vh] overflow-hidden">
       {/* Banner Background with Darker Overlay */}
       <motion.div
         className="absolute inset-0"
@@ -256,6 +256,6 @@ export default function SimplifiedBannerSection() {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
