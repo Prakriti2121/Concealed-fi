@@ -1,6 +1,6 @@
 import React from "react";
 import { ArticleContent } from "./components/ArticleContent";
-import { breadcrumbSchemaGenerator } from "../../utils/utils";
+import { breadcrumbSchemaGenerator, organizationSchema } from "@/app/utils/schemaUtils";
 
 export async function generateMetadata() {
   // Build the absolute URL using an environment variable or fallback to localhost
@@ -31,11 +31,19 @@ const page = () => {
       url: `${process.env.NEXT_PUBLIC_BASE_URL}/viini-artikkelit`,
     },
   ]);
+
+  // Generate organization schema
+  const organization = organizationSchema();
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: organization }}
       />
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Article</h1>

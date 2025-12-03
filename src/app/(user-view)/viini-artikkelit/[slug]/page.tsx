@@ -2,7 +2,8 @@ import ArticlePageClient from "../components/ArticlePageClient";
 import {
   breadcrumbSchemaGenerator,
   postSchemaGenerator,
-} from "../../../utils/utils";
+  organizationSchema,
+} from "@/app/utils/schemaUtils";
 
 export async function generateMetadata({
   params,
@@ -72,15 +73,22 @@ export default async function ArticlePage({
   // Generate post schema
   const postSchema = postSchemaGenerator(postData);
 
+  // Generate organization schema
+  const organization = organizationSchema();
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: postSchema }}
+        dangerouslySetInnerHTML={{ __html: breadcrumbs }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+        dangerouslySetInnerHTML={{ __html: organization }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: postSchema }}
       />
       <ArticlePageClient slug={slug} />
     </>

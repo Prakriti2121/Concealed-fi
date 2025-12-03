@@ -5,6 +5,7 @@ import WineArticles from "@/components/molecules/WineArticles";
 import FeaturedProduct from "@/components/organisms/FeaturedProduct";
 import Jumbotron from "@/components/organisms/Jumbotron";
 import { Metadata } from "next";
+import { breadcrumbSchemaGenerator, organizationSchema } from "@/app/utils/schemaUtils";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 export async function generateMetadata(): Promise<Metadata> {
@@ -41,8 +42,21 @@ export default async function Home() {
   });
   const wineArticlesData = await resArticles.json();
 
+  const breadcrumbs = breadcrumbSchemaGenerator([]);
+  const organization = organizationSchema();
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        className="yoast-schema-graph"
+        dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        className="yoast-schema-graph"
+        dangerouslySetInnerHTML={{ __html: organization }}
+      />
       <BannerSection />
       <Jumbotron />
       <FeaturedProduct />

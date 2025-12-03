@@ -20,7 +20,7 @@ import {
 import BreadCrumb from "../../components/breadcrumb/breadcrumb";
 import SharePopover from "../components/SharePopover";
 import { Metadata } from "next";
-import { productSchemaGenerator } from "@/app/utils/utils";
+import { productSchemaGenerator, breadcrumbSchemaGenerator, organizationSchema } from "@/app/utils/schemaUtils";
 
 export const revalidate = 0;
 
@@ -172,12 +172,39 @@ export default async function Page({ params }: PageProps) {
     availableOnlyOnline: product.availableOnlyOnline,
   };
 
+  // Build absolute base URL
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+  // Generate breadcrumb schema
+  const breadcrumbs = breadcrumbSchemaGenerator([
+    {
+      name: "Viinit-luettelo",
+      url: `${baseUrl}/viinit-luettelo`,
+    },
+    {
+      name: product.title,
+      url: `${baseUrl}/viinit-luettelo/${slug}`,
+    },
+  ]);
+
+  // Generate organization schema
+  const organization = organizationSchema();
+
   // Generate JSON-LD schema
   const productJsonLd = productSchemaGenerator(productData);
 
   return (
     <div className="container mx-auto px-4 py-8">
       {/* JSON-LD Schema for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: organization }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: productJsonLd }}

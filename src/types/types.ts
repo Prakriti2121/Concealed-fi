@@ -9,6 +9,7 @@ type JsonValue =
 type JsonArray = JsonValue[];
 export type Product = {
   id: number;
+  slug: string;
   title: string;
   // Wine Fields
   isNew: boolean;

@@ -1,5 +1,5 @@
 import EnglishContent from "./components/EnglishContent";
-import { breadcrumbSchemaGenerator } from "../../utils/utils";
+import { breadcrumbSchemaGenerator, organizationSchema } from "@/app/utils/schemaUtils";
 
 // Dynamically fetch metadata on the server
 export async function generateMetadata() {
@@ -35,11 +35,18 @@ const InEnglishPage = () => {
     },
   ]);
 
+  // Generate organization schema
+  const organization = organizationSchema();
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbs }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: organization }}
       />
       <div>
         <EnglishContent />
