@@ -10,10 +10,6 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET() {
-  const session = await getServerSession(NEXT_AUTH_CONFIG);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
 
   try {
     // Fetch posts with tags and categories
